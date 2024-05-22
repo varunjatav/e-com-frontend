@@ -24,15 +24,9 @@ Group Project.
 # To Run Locally
 ## Clone the project
 ```bash
-  git clone https://github.com/nikhildeora/black-pearl.git
+  git clone https://github.com/varunjata/e-com-frontend.git
 ```
 
-Go to the project directory
-
-```bash
-  cd black-pearl
-
-```
 
 Install dependencies
 
