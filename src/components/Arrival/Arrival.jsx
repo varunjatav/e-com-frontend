@@ -15,10 +15,10 @@ import SingleProduct from '../SingleItem/SingleItem'
 
 function Arrival() {
  
-  let [data, setData] = useState([]);
-  const { category } = useParams();
-  const [heroimg, setHeroimg] = useState("")
- const [pselect,setPselect] = useState(1)
+let [data, setData] = useState([]);
+const { category } = useParams();
+const [heroimg, setHeroimg] = useState("")
+const [pselect,setPselect] = useState(1)
 const [categ,setCateg] = useState("all")
 const [sortToggle , setSortToggle] = useState(false)
 

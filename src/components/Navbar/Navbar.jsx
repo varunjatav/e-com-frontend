@@ -9,7 +9,7 @@ import { AuthContext } from '../../context/AuthContext'
 const Navbar = () => {
     const [toggle, setToggle] = useState(false)
     const {Logout, currentUser} = useContext(AuthContext)
-
+   
     return (
 
         <div className={styles.navbar__outermain_div}>

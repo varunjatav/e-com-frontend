@@ -1,6 +1,7 @@
 import React from "react";
-import {auth} from "../firebase"
-import {createUserWithEmailAndPassword,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendEmailVerification,updateProfile,sendPasswordResetEmail} from "firebase/auth"
+import { auth } from "../firebase"
+import { onAuthStateChanged,updateProfile } from "firebase/auth"
+import axios from "axios";
 
 
 export const AuthContext = React.createContext()
@@ -9,40 +10,67 @@ export default function AuthContextProvider({children}){
  const [currentUser , setCurrentUser] = React.useState({});
 
 
-function Signup(email,password){
-    return createUserWithEmailAndPassword(auth,email,password)
-    
+
+async function Signup( mobileNumber, email, firstName, lastName,password){
+    /*return createUserWithEmailAndPassword(auth,email,password)*/
+    try {
+        const res = await axios.post('http://localhost:8000/auth/signup', {
+            mobileNumber, email, firstName, lastName, password
+        });
+        setCurrentUser(res)
+        console.log(res);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+async function Login(email, password) {
+    try {
+      const response = await axios.post('http://localhost:8000/auth/login', { email, password });
+      setCurrentUser(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 function updateprofilename(name){
     return updateProfile(auth.currentUser,{displayName : name})
 }
 
-function sendpassreset(email){
-   sendPasswordResetEmail(auth,email)
-   .then(()=>{
-      alert("Password reset request sent to your Email id")
-   })
-   .catch((err)=>console.log(err))
+async function sendpassreset(email, oldpassword, newpassword, cnewpassword){
+    try {
+        const response =  await axios.post('http://localhost:8000/auth/send-password-reset', {email, oldpassword, newpassword, cnewpassword});
+        console.log(response);
+    } catch (error) {
+        console.error(error);
+    }
+
 }
 
-function Login(email,password){
-  return signInWithEmailAndPassword(auth,email,password)
-}
 
-function emailverify(){
-    sendEmailVerification(auth.currentUser)
-    .then(()=>{
-          alert("Verify your Email Id , a mail sent to your email")
-    })
-    .catch((err)=>{
-        const errrrr = err;
-    })
-}
 
-function Logout(){
-   signOut(auth)
+// function emailverify(){
+//     sendEmailVerification(auth.currentUser)
+//     .then(()=>{
+//           alert("Verify your Email Id , a mail sent to your email")
+//     })
+//     .catch((err)=>{
+//         const errrrr = err;
+//     })
+// }
+
+async function Logout(){
+
+try {
+    const res = await axios.post('http://localhost:8000/auth/logout',{}, {
+        headers: {
+          'Authorization': `Bearer ${currentUser.token}`
+        }});
+        setCurrentUser(null);
+    console.log(res.data);
+} catch (error) {
+    console.log(error);
+}
 }
 
 
@@ -63,7 +91,7 @@ React.useEffect(()=>{
      Logout,
      updateprofilename,
      sendpassreset,
-     emailverify
+    //  emailverify
     }
     return (
         <AuthContext.Provider value={value}>
