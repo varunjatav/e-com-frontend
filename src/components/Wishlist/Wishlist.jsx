@@ -5,26 +5,28 @@ import { useEffect, useState } from "react";
 
 const Wishlist = () => {
   const [status, setStatus] = useState(false);
+  console.log(setStatus);
   const [datas, setDatas] = useState([]);
   console.log(datas);
 
   const addtocart = async (data) => {
     // let res = await fetch(`http://localhost:8080/cart`, {
-    let res = await fetch(`https://blackpearl.onrender.com/cart`, {
-      method: "POST",
-      body: JSON.stringify({ ...data }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    // let res = await fetch(`https://blackpearl.onrender.com/cart`, {
+    //   method: "POST",
+    //   body: JSON.stringify({ ...data }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // console.log(res);
   };
 
   const deleteWishlist = async (id) => {
     // let res = await fetch(`http://localhost:8080/wishlist/${id}`, {
-    let res = await fetch(`https://blackpearl.onrender.com/wishlist/${id}`, {
-      method: "Delete",
-    });
-    setStatus(!status);
+    // let res = await fetch(`https://blackpearl.onrender.com/wishlist/${id}`, {
+    //   method: "Delete",
+    // });
+    // setStatus(!status);
   };
 
   useEffect(() => {

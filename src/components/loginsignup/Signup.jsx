@@ -15,13 +15,13 @@ export default function Signup() {
   const passRef = useRef(null);
   const cpassRef = useRef(null);
 
-  const { Signup, updateprofilename, emailverify } = useContext(AuthContext);
+  const { Signup } = useContext(AuthContext);
   const [iterror, setIterror] = useState("");
   const navigate = useNavigate();
 
   const getformdata = async (event) => {
     event.preventDefault();
-    if (passRef.current.value != cpassRef.current.value) {
+    if (passRef.current.value !== cpassRef.current.value) {
       setIterror("password are not match");
       return;
     }

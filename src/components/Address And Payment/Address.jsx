@@ -12,11 +12,11 @@ const Address = () => {
 
   const getFormData = () => {
     if (
-      nameRef.current.value == "" ||
-      emailRef.current.value == "" ||
-      addreddRef.current.value == "" ||
-      cityRef.current.value == "" ||
-      statelRef.current.value == ""
+      nameRef.current.value === "" ||
+      emailRef.current.value === "" ||
+      addreddRef.current.value === "" ||
+      cityRef.current.value === "" ||
+      statelRef.current.value === ""
     ) {
       // console.log(addressObj);
       alert("Please fill Complete Address");

@@ -1,11 +1,11 @@
 import React from 'react'
 
 
-import { Box, Text, Image, Checkbox } from '@chakra-ui/react'
+import { Box, Image } from '@chakra-ui/react'
 
 import Styles from "./Arrival.module.css"
 
-import { Select } from '@chakra-ui/react'
+// import { Select } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'

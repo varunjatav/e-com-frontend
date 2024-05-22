@@ -41,6 +41,7 @@ async function sendpassreset(email, oldpassword, newpassword, cnewpassword){
     try {
         const response =  await axios.post('http://localhost:8000/auth/send-password-reset', {email, oldpassword, newpassword, cnewpassword});
         console.log(response);
+            
     } catch (error) {
         console.error(error);
     }

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import styles from "../SingleProduct/Detail.module.css";
 import { FaRegHeart, FaShoppingCart } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
-import { Badge } from "@chakra-ui/react";
+// import { Badge } from "@chakra-ui/react";
 import singleProd1 from "../../assets/singleProd1.png";
 import singleProd2 from "../../assets/singleProd2.png";
 import singleProd3 from "../../assets/singleProd3.png";
