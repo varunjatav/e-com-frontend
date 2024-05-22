@@ -24,7 +24,7 @@ Group Project.
 # To Run Locally
 ## Clone the project
 ```bash
-  git clone https://github.com/varunjata/e-com-frontend.git
+  git clone https://github.com/varunjatav/e-com-frontend.git
 ```
 
 
