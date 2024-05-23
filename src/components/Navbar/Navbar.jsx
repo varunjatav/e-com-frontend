@@ -1,15 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from "./navbar.module.css"
 import logo from "../../assets/logo.png"
 import {Link as RouterLink} from "react-router-dom"
 import { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext'
+import axios from 'axios';
 
 
 const Navbar = () => {
     const [toggle, setToggle] = useState(false)
-    const {Logout, currentUser} = useContext(AuthContext);
-console.log(currentUser);
+    const {Logout} = useContext(AuthContext);
+    const [token, setToken] = useState(null);
+// console.log(currentUser);
+const currentUser = localStorage.getItem('token');
+// console.log(currentUser);
+
+async function getUserToken() {
+    try {
+      const userToken =  await axios.get("http://localhost:8000/user-token");
+       setToken(userToken.data.token);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+  useEffect(()=> {
+    getUserToken();
+  },[])
+ 
+
     return (
 
         <div className={styles.navbar__outermain_div}>
@@ -44,9 +62,9 @@ console.log(currentUser);
 
 
                 <ul type="none" className={toggle ? `${styles.navbar__mainthirdpart} ${styles.navbar__showmenu}` : styles.navbar__mainthirdpart}>
-                   {currentUser===null ? <li><RouterLink to={"/login"}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}Login</RouterLink></li> : currentUser.displayName===null ? "username" : currentUser.displayName }
+                 { token ===null ? <li><RouterLink to={"/login"}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}Login</RouterLink></li> : currentUser && currentUser.displayName===null ? "username" : currentUser && currentUser.displayName }
 
-                  { currentUser === null ? <li><RouterLink to={"/signup"}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}Singup</RouterLink></li> : <li onClick={Logout} style={{cursor:"pointer"}}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}   Log Out     </li> }
+                  { token === null ? <li><RouterLink to={"/signup"}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}Singup</RouterLink></li> : <li onClick={Logout} style={{cursor:"pointer"}}><i className={`fa-solid fa-user ${styles.navbar__mainthirdpart_icon}`}></i>{" "}   Log Out     </li> }
 
                     <li><RouterLink to={"/wishlist"}> <i className={`fa-solid fa-heart ${styles.navbar__mainthirdpart_icon}`}></i></RouterLink></li>
                     <li><RouterLink to={"/cart"}> <i className={`fa-solid fa-bag-shopping ${styles.navbar__mainthirdpart_icon}`}></i></RouterLink></li>

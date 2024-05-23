@@ -10,7 +10,8 @@ export default function Login() {
   const [iterror, setIterror] = useState("")
   const { Login} = useContext(AuthContext)
   const navigate = useNavigate()
-
+  const currentUser = localStorage.getItem('token');
+  console.log(currentUser);
   const getformdata = async (event) => {
     event.preventDefault();
    
@@ -19,8 +20,10 @@ export default function Login() {
       await Login(emailRef.current.value, passRef.current.value);
       if(emailRef.current.value==="blackpearl@gmail.com"){
         navigate("/admin")
-      }else{
+      }else if(currentUser){
         navigate("/")
+      }else{
+        setIterror("invalid username or password")
       }
     } catch (error) {
       setIterror("invalid username or password")

@@ -13,11 +13,13 @@ import spriteImage2 from "../../assets/HomeImage/spriteImage2 (2).png";
 import spriteImage3 from "../../assets/HomeImage/spriteImage2 (3).png";
 import spriteImage4 from "../../assets/HomeImage/spriteImage2 (4).png";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function Detail() {
   const [data, setData] = useState({});
   const { id } = useParams();
-  console.log(id);
+  const [token, setToken] = useState(null);
+  // console.log(id);
 
   useEffect(() => {
     async function getData() {
@@ -26,20 +28,65 @@ export default function Detail() {
       let data = await res.json();
       // console.log(data);
       setData(data);
+      console.log(data);
     }
     getData();
   }, []);
+//   const addtocart = async () => {
+//     try {
+//       const currentUser = localStorage.getItem('token');
+//       console.log(currentUser);
+//         if (!token) { 
+//           alert('Please log in to add items to the cart.');
+//           return;
+//       }
+//         const config = {
+//             headers: {
+//               'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`, // Add token to request headers
+//             }
+//         };
+
+//         const response = await axios.post('http://localhost:8000/cart/add', { userId: currentUser, productId: id, quantity: 1 }, config);
+
+//         if (response.status === 200) {
+//             // Handle successful addition to cart
+//             console.log('Item added to cart');
+//         } else {
+//             // Handle other responses
+//             console.log('Failed to add item to cart');
+//         }
+//     } catch (error) {
+//         console.error('Error adding item to cart:', error);
+//     }
+// };
 
   const addtocart = async () => {
+    // const currentUser = localStorage.getItem('token');
     // let res = await fetch(`http://localhost:8080/cart`, {
-    let res = await fetch(`https://blackpearl.onrender.com/cart`, {
+      console.log(token);
+    let res = await fetch(`http://localhost:8000/cart/add`, {
       method: "POST",
       body: JSON.stringify({ ...data }),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
     })
   }
+
+  async function getUserToken() {
+    try {
+      const userToken =  await axios.get("http://localhost:8000/user-token");
+       setToken(userToken.data.token);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+  useEffect(()=> {
+    getUserToken();
+  },[])
+
 
   const addtowishlist = async () => {
     // let res = await fetch(`http://localhost:8080/wishlist`, {
