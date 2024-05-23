@@ -4,12 +4,13 @@ import wishlist from "../../assets/wishlist.png";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
+
 const Cart = () => {
   const [status, setStatus] = useState(false);
   const [datas, setDatas] = useState([]);
   const [total, setTotal] = useState(0);
-
-  const deleteWishlist = async (id) => {
+  
+  const deleteCart = async (id) => {
     // let res = await fetch(`http://localhost:8080/cart/${id}`, {
     let res = await fetch(`https://blackpearl.onrender.com/cart/${id}`, {
       method: "Delete",
@@ -27,7 +28,7 @@ const Cart = () => {
   }
 
   useEffect(() => {
-    async function getWishList() {
+    async function getCart() {
       // let res = await fetch("http://localhost:8080/cart");
       let res = await fetch("https://blackpearl.onrender.com/cart");
       let data1 = await res.json();
@@ -35,7 +36,7 @@ const Cart = () => {
       await getTotal(data1);
     }
 
-    getWishList();
+    getCart();
   }, [status]);
 
   if (datas.length === 0) {
@@ -65,7 +66,7 @@ const Cart = () => {
 
             <p className={styles.single__nametag}>{data.name}</p>
             <div className={styles.single__buttondiv}>
-              <button onClick={() => deleteWishlist(data.id)}>
+              <button onClick={() => deleteCart(data.id)}>
                 Remove From Cart
               </button>
             </div>

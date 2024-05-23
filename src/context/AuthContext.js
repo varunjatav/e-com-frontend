@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth } from "../firebase";
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import axios from "axios";
@@ -6,8 +6,14 @@ import axios from "axios";
 export const AuthContext = React.createContext();
 
 export default function AuthContextProvider({ children }) {
-  const [currentUser, setCurrentUser] = React.useState({});
+  //
+  let token = localStorage.getItem("token");
+  //    console.log("token from auth context", token);
+  const [currentUser, setCurrentUser] = React.useState(() => token || null);
 
+  useEffect(() => {
+    setCurrentUser(token);
+  }, [currentUser]);
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
     try {
@@ -18,9 +24,9 @@ export default function AuthContextProvider({ children }) {
         lastName,
         password,
       });
-      setCurrentUser(res);
+      setCurrentUser(res.data.token);
       console.log(res);
-    //   localStorage.setItem("token", res.data.user); // Save token to localStorage
+      localStorage.setItem("token", res.data.user); // Save token to localStorage
     } catch (error) {
       console.log(error);
     }
@@ -28,18 +34,25 @@ export default function AuthContextProvider({ children }) {
 
   async function Login(email, password) {
     try {
+      console.log(email, password);
       const response = await axios.post("http://localhost:8000/auth/login", {
         email,
         password,
       });
+      
+        setCurrentUser(response.data.token);
+    
 
-      setCurrentUser(response.data);
+      console.log("auth context ", response.data.token);
       localStorage.setItem("token", response.data.token); // Save token to localStorage
     } catch (error) {
       console.error(error);
     }
+   
   }
+ 
 
+  
   function updateprofilename(name) {
     return updateProfile(auth.currentUser, { displayName: name });
   }
@@ -67,16 +80,13 @@ export default function AuthContextProvider({ children }) {
   // }
 
   async function Logout() {
-
     localStorage.removeItem("token");
+    setCurrentUser(null);
     refreshPage();
   }
   function refreshPage() {
     window.location.reload(false);
   }
-
-
-
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -94,7 +104,6 @@ export default function AuthContextProvider({ children }) {
     updateprofilename,
     sendpassreset,
     //  emailverify
-    
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

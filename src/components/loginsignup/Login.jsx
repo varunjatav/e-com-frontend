@@ -2,31 +2,37 @@ import React, { useRef, useState, useContext } from 'react'
 import styles from "../loginsignup/Login.module.css"
 import { AuthContext } from "../../context/AuthContext";
 import {Link as RouterLink,useNavigate} from "react-router-dom"
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 
 export default function Login() {
   const emailRef = useRef(null);
   const passRef = useRef(null);
   const [iterror, setIterror] = useState("")
-  const { Login} = useContext(AuthContext)
-  const navigate = useNavigate()
-  const currentUser = localStorage.getItem('token');
-  console.log(currentUser);
+  const { Login } = useContext(AuthContext)
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(null);
+ 
+  // console.log(currentUser);
   const getformdata = async (event) => {
     event.preventDefault();
    
     try {
+     
       setIterror("");
       await Login(emailRef.current.value, passRef.current.value);
+      const currentUser = localStorage.getItem('token');
+      console.log(currentUser);
       if(emailRef.current.value==="blackpearl@gmail.com"){
         navigate("/admin")
       }else if(currentUser){
-        navigate("/")
+        console.log("cureent user log ");
+        navigate("/");
       }else{
-        setIterror("invalid username or password")
+        setIterror("invalid username or password 26")
       }
     } catch (error) {
-      setIterror("invalid username or password")
+      setIterror("invalid username or  line 29")
     }
   }
 
@@ -64,7 +70,13 @@ export default function Login() {
               <div style={{ textAlign:"left",paddingLeft:"2rem" }}>
                 Enter password
               </div>
-              <input ref={passRef} style={{ marginLeft: "0rem", marginTop: "0.5rem", width: "87%", height: "2rem", borderColor: "rgb(173, 169, 173)", borderRadius: "0.4rem", backgroundColor: "white", outline: "none", border: "1px solid rgb(222, 87, 229)", padding: "0.5rem" }} type="password" placeholder='Enter password' />
+              <input ref={passRef} style={{ marginLeft: "0rem", marginTop: "0.5rem", width: "87%", height: "2rem", borderColor: "rgb(173, 169, 173)", borderRadius: "0.4rem", backgroundColor: "white", outline: "none", border: "1px solid rgb(222, 87, 229)", padding: "0.5rem" }} type={showPassword ?"text":"password"} placeholder='Enter password' />
+              <div
+                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer" }}
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                 {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+              </div>
             </div>
 
             <RouterLink style={{textDecoration:"none"}} to={"/forget"}><p style={{color:"rgb(222, 87, 229)" , cursor: "pointer"}} >Forgot password</p></RouterLink>

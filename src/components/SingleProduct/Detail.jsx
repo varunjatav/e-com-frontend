@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import styles from "../SingleProduct/Detail.module.css";
@@ -14,16 +14,17 @@ import spriteImage3 from "../../assets/HomeImage/spriteImage2 (3).png";
 import spriteImage4 from "../../assets/HomeImage/spriteImage2 (4).png";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Detail() {
   const [data, setData] = useState({});
   const { id } = useParams();
-  const [token, setToken] = useState(null);
+  const {currentUser} = useContext(AuthContext);
+  console.log("token from Cart", currentUser);
   // console.log(id);
 
   useEffect(() => {
     async function getData() {
-      // let res = await fetch(`http://localhost:8080/jewellery/${id}`);
       let res = await fetch(`http://localhost:8000/jwellery/${id}`);
       let data = await res.json();
       // console.log(data);
@@ -32,60 +33,28 @@ export default function Detail() {
     }
     getData();
   }, []);
-//   const addtocart = async () => {
-//     try {
-//       const currentUser = localStorage.getItem('token');
-//       console.log(currentUser);
-//         if (!token) { 
-//           alert('Please log in to add items to the cart.');
-//           return;
-//       }
-//         const config = {
-//             headers: {
-//               'Content-Type': 'application/json',
-//                 'Authorization': `Bearer ${token}`, // Add token to request headers
-//             }
-//         };
 
-//         const response = await axios.post('http://localhost:8000/cart/add', { userId: currentUser, productId: id, quantity: 1 }, config);
-
-//         if (response.status === 200) {
-//             // Handle successful addition to cart
-//             console.log('Item added to cart');
-//         } else {
-//             // Handle other responses
-//             console.log('Failed to add item to cart');
-//         }
-//     } catch (error) {
-//         console.error('Error adding item to cart:', error);
-//     }
-// };
 
   const addtocart = async () => {
-    // const currentUser = localStorage.getItem('token');
-    // let res = await fetch(`http://localhost:8080/cart`, {
-      console.log(token);
+    
     let res = await fetch(`http://localhost:8000/cart/add`, {
       method: "POST",
       body: JSON.stringify({ ...data }),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${currentUser}`
       }
+      
     })
+    if (!res.ok) {
+      throw new Error(`HTTP error! Status: ${res.status}`);
+    }
+
+    let responseData = await res.json(); // Parse the JSON response
+    console.log(responseData);
   }
 
-  async function getUserToken() {
-    try {
-      const userToken =  await axios.get("http://localhost:8000/user-token");
-       setToken(userToken.data.token);
-    } catch (error) {
-        console.log(error);
-    }
-  }
-  useEffect(()=> {
-    getUserToken();
-  },[])
+
 
 
   const addtowishlist = async () => {
