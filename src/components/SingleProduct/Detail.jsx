@@ -13,14 +13,14 @@ import spriteImage2 from "../../assets/HomeImage/spriteImage2 (2).png";
 import spriteImage3 from "../../assets/HomeImage/spriteImage2 (3).png";
 import spriteImage4 from "../../assets/HomeImage/spriteImage2 (4).png";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
+
+import { AppContext } from "../../context/AppContext";
 
 export default function Detail() {
   const [data, setData] = useState({});
   const { id } = useParams();
-  const {currentUser} = useContext(AuthContext);
-  console.log("token from Cart", currentUser);
+  const {addtocart} = useContext(AppContext);
+  
   // console.log(id);
 
   useEffect(() => {
@@ -35,24 +35,7 @@ export default function Detail() {
   }, []);
 
 
-  const addtocart = async () => {
-    
-    let res = await fetch(`http://localhost:8000/cart/add`, {
-      method: "POST",
-      body: JSON.stringify({ ...data }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${currentUser}`
-      }
-      
-    })
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
-    }
 
-    let responseData = await res.json(); // Parse the JSON response
-    console.log(responseData);
-  }
 
 
 

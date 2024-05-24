@@ -8,7 +8,7 @@ const SingleProduct = (props) => {
 
     const addtocart = async () => {
         // let res = await fetch(`http://localhost:8080/cart`, {
-        let res = await fetch(`https://blackpearl.onrender.com/cart`, {
+        let res = await fetch(`http://localhost:8000/cart/add`, {
             method: "POST",
             body: JSON.stringify({ ...props }),
             headers: {

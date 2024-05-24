@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import styles from "./forgot.module.css";
 import { useRef } from "react";
-import { AuthContext } from "../../context/AuthContext";
+// import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { AppContext } from "../../context/AppContext";
 
 const Forgot = () => {
     const [showOldPassword, setShowOldPassword] = useState(false);
@@ -14,7 +15,7 @@ const Forgot = () => {
   const oldPasswordRef = useRef(null);
   const newPasswordRef = useRef(null);
   const cnewPasswordRef = useRef(null);
-  const { sendpassreset } = useContext(AuthContext);
+  const { sendpassreset } = useContext(AppContext);
   const navigate = useNavigate();
 
   const getformdata = async (event) => {

@@ -1,8 +1,8 @@
 import React, { useRef, useState, useContext } from "react";
 import styles from "../loginsignup/Signup.module.css";
-import { AuthContext } from "../../context/AuthContext";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { AppContext } from "../../context/AppContext";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,7 +15,7 @@ export default function Signup() {
   const passRef = useRef(null);
   const cpassRef = useRef(null);
 
-  const { Signup , currentUser } = useContext(AuthContext);
+  const { Signup , currentUser } = useContext(AppContext);
   const [iterror, setIterror] = useState("");
   const navigate = useNavigate();
 

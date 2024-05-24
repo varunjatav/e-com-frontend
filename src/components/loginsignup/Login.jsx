@@ -1,15 +1,15 @@
 import React, { useRef, useState, useContext } from 'react'
 import styles from "../loginsignup/Login.module.css"
-import { AuthContext } from "../../context/AuthContext";
 import {Link as RouterLink,useNavigate} from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import { AppContext } from '../../context/AppContext';
 
 
 export default function Login() {
   const emailRef = useRef(null);
   const passRef = useRef(null);
   const [iterror, setIterror] = useState("")
-  const { Login } = useContext(AuthContext)
+  const { Login } = useContext(AppContext)
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(null);
  
