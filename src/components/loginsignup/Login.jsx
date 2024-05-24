@@ -22,17 +22,17 @@ export default function Login() {
       setIterror("");
       await Login(emailRef.current.value, passRef.current.value);
       const currentUser = localStorage.getItem('token');
-      console.log(currentUser);
+      // console.log(currentUser);
       if(emailRef.current.value==="blackpearl@gmail.com"){
         navigate("/admin")
       }else if(currentUser){
-        console.log("cureent user log ");
+        // console.log("current user log ");
         navigate("/");
       }else{
-        setIterror("invalid username or password 26")
+        setIterror("invalid username or password")
       }
     } catch (error) {
-      setIterror("invalid username or  line 29")
+      setIterror("invalid Details")
     }
   }
 

@@ -15,7 +15,7 @@ export default function Signup() {
   const passRef = useRef(null);
   const cpassRef = useRef(null);
 
-  const { Signup } = useContext(AuthContext);
+  const { Signup , currentUser } = useContext(AuthContext);
   const [iterror, setIterror] = useState("");
   const navigate = useNavigate();
 
@@ -334,6 +334,7 @@ export default function Signup() {
               </RouterLink>
             </div>
           </div>
+          {currentUser === null ? "Please Enter Valid Details": ""}
         </form>
       </div>
     </div>

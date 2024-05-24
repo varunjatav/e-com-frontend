@@ -13,7 +13,13 @@ export default function AuthContextProvider({ children }) {
 
   useEffect(() => {
     setCurrentUser(token);
+    // if (currentUser) {
+    //   localStorage.setItem("token", currentUser);
+    // } else {
+    //   localStorage.removeItem("token");
+    // }
   }, [currentUser]);
+
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
     try {
@@ -24,9 +30,16 @@ export default function AuthContextProvider({ children }) {
         lastName,
         password,
       });
-      setCurrentUser(res.data.token);
-      console.log(res);
-      localStorage.setItem("token", res.data.user); // Save token to localStorage
+
+      if(res.status >= 400 && res.status <=499){
+        setCurrentUser(null);
+        // console.log(res.data);
+      }else{
+        setCurrentUser(res.data.token);
+        // console.log(res);
+        localStorage.setItem("token", res.data.user); // Save token to localStorage
+      }
+     
     } catch (error) {
       console.log(error);
     }
@@ -34,16 +47,14 @@ export default function AuthContextProvider({ children }) {
 
   async function Login(email, password) {
     try {
-      console.log(email, password);
+      // console.log(email, password);
       const response = await axios.post("http://localhost:8000/auth/login", {
         email,
         password,
       });
       
-        setCurrentUser(response.data.token);
-    
-
-      console.log("auth context ", response.data.token);
+      setCurrentUser(response.data.token);
+      // console.log("auth context ", response.data.token);
       localStorage.setItem("token", response.data.token); // Save token to localStorage
     } catch (error) {
       console.error(error);
@@ -63,7 +74,7 @@ export default function AuthContextProvider({ children }) {
         "http://localhost:8000/auth/send-password-reset",
         { email, oldpassword, newpassword, cnewpassword }
       );
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -82,11 +93,11 @@ export default function AuthContextProvider({ children }) {
   async function Logout() {
     localStorage.removeItem("token");
     setCurrentUser(null);
-    refreshPage();
+    // refreshPage();
   }
-  function refreshPage() {
-    window.location.reload(false);
-  }
+  // function refreshPage() {
+  //   window.location.reload(false);
+  // }
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

@@ -1,11 +1,6 @@
 
-
-
-
    import React from 'react'
    import styles from "./Otherjewellery.module.css"
-
-   
    export default function Otherjewellery() {
      return (
        <div>

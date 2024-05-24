@@ -8,7 +8,7 @@ import Styles from "./Arrival.module.css"
 // import { Select } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import findstore from "../../assets/findstoreimg.png"
 import SingleProduct from '../SingleItem/SingleItem'
 
@@ -16,11 +16,12 @@ import SingleProduct from '../SingleItem/SingleItem'
 function Arrival() {
  
 let [data, setData] = useState([]);
-const { category } = useParams();
+let { category } = useParams();
 const [heroimg, setHeroimg] = useState("")
 const [pselect,setPselect] = useState(1)
 const [categ,setCateg] = useState("all")
-const [sortToggle , setSortToggle] = useState(false)
+const [sortToggle , setSortToggle] = useState(false);
+const navigate = useNavigate();
 
 
 
@@ -34,9 +35,9 @@ const [sortToggle , setSortToggle] = useState(false)
     } else if (category === "earrings") {
       setHeroimg("https://banner.caratlane.com/live-images/4320a30823014770b49d6c35ba3508c9.jpg")
       setCateg("earrings")
-    } else if (category === "bracelet") {
+    } else if (category === "bracelets") {
       setHeroimg("https://banner.caratlane.com/live-images/dab8c9bccb50479fbad968e7ea6ea450.webp")
-      setCateg("bracelet")
+      setCateg("bracelets")
     } else if (category === "solitaire") {
       setHeroimg("https://banner.caratlane.com/live-images/9aeed0015ab544ce98770daec556e90b.jpg")
       setCateg("solitaire")
@@ -64,7 +65,7 @@ const [sortToggle , setSortToggle] = useState(false)
         resp = await fetch(`http://localhost:8000/jwellery`);
       } else {
         // resp = await fetch(`http://localhost:8080/jewellery?category=${category}`);
-        resp = await fetch(`http://localhost:8000/jwellery?category=${category}`);
+        resp = await fetch(`http://localhost:8000/jwellery/q?category=${category}`);
       }
       let apiData = await resp.json();
       setData(apiData)
@@ -92,11 +93,11 @@ async function sorrtbygte(gte,lte){
   let resp;
   if (category === "all" || category === "ready" || category === "gifts" || category === "findstore") {
     // resp = await fetch(`http://localhost:8080/jewellery?price_gte=${gte}&price_lte=${lte}`);
-    resp = await fetch(`http://localhost:8000/jwellery?price_gte=${gte}&price_lte=${lte}`);
+    resp = await fetch(`http://localhost:8000/jwellery/q/price?price_gte=${gte}&price_lte=${lte}`);
     setCateg("all")
   } else {
     // resp = await fetch(`http://localhost:8080/jewellery?category=${category}&price_gte=${gte}&price_lte=${lte}`);
-    resp = await fetch(`http://localhost:8000/jwellery?category=${category}&price_gte=${gte}&price_lte=${lte}`);
+    resp = await fetch(`http://localhost:8000/jwellery/q?category=${category}&price_gte=${gte}&price_lte=${lte}`);
   }
   let apiData = await resp.json();
   setData(apiData)
@@ -104,15 +105,18 @@ async function sorrtbygte(gte,lte){
 }
 
 async function changeCateg(switchcateg){
-  
-  if (category === "all" || category === "ready" || category === "gifts" || category === "findstore") {
-    // let res = await fetch(`http://localhost:8080/jewellery?category=${switchcateg}`);
-    let res = await fetch(`http://localhost:8000/jwellery?category=${switchcateg}`);
-    let apiData = await res.json();
-    setData(apiData)
-    setCateg(switchcateg)
-    setPselect(1)
-  }
+  console.log(category);
+  console.log(switchcateg);
+  navigate(`/newarrival/${switchcateg}`);
+  // category = switchcateg;
+  // if (category === "all" || category === "ready" || category === "gifts" || category === "findstore") {
+  //   // let res = await fetch(`http://localhost:8080/jewellery?category=${switchcateg}`);
+  //   let res = await fetch(`http://localhost:8000/jwellery?category=${switchcateg}`);
+  //   let apiData = await res.json();
+  //   setData(apiData)
+  //   setCateg(switchcateg)
+  //   setPselect(1)
+  // }
   
 }
 
@@ -144,7 +148,7 @@ async function changeCateg(switchcateg){
             <h2>Category</h2>
             <button style={categ==="rings" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("rings")}>Rings</button>
             <button style={categ==="earrings" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("earrings")}>Earrings</button>
-            <button style={categ==="bracelet" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("bracelet")}>Bracelets</button>
+            <button style={categ==="bracelets" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("bracelet")}>Bracelets</button>
             <button style={categ==="solitaire" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("solitaire")}>Solitaires</button>
             <button style={categ==="mangalsutra" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("mangalsutra")}>Manglasutra</button>
             <button style={categ==="kids" ? {background: 'linear-gradient(to right,#fff6c8 0%,#ffd7f5 48%)'} : null} onClick={()=>changeCateg("kids")}>Kids</button>
