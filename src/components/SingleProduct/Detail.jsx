@@ -13,7 +13,6 @@ import spriteImage2 from "../../assets/HomeImage/spriteImage2 (2).png";
 import spriteImage3 from "../../assets/HomeImage/spriteImage2 (3).png";
 import spriteImage4 from "../../assets/HomeImage/spriteImage2 (4).png";
 import { useParams } from "react-router-dom";
-
 import { AppContext } from "../../context/AppContext";
 
 export default function Detail() {
@@ -29,7 +28,7 @@ export default function Detail() {
       let data = await res.json();
       // console.log(data);
       setData(data);
-      console.log(data);
+      // console.log(data);
     }
     getData();
   }, []);
@@ -49,7 +48,7 @@ export default function Detail() {
     <div>
       <div className={styles.containerDetails}>
         <div className={styles.prodImg}>
-          <img src={data.image} alt="" /> 
+          <img src={data.image} alt={data.name} /> 
         </div>
         <div className={styles.prodDetails}>
           <h1>{data.name}</h1>
@@ -65,7 +64,7 @@ export default function Detail() {
             </button>
             <button onClick={addtowishlist}>
               {" "}
-              <FaRegHeart /> Add T0 WishList
+              <FaRegHeart /> Add To WishList
             </button>
           </div>
           <h5 className={styles.tick}>
@@ -97,14 +96,14 @@ export default function Detail() {
           </div>
         </div>
         <div className={styles.singleProd}>
-          <img src={singleProd1} alt="" />
-          <img src={singleProd2} alt="" />
-          <img src={singleProd3} alt="" />
+          <img src={singleProd1} alt="singleProd1" />
+          <img src={singleProd2} alt="singleProd2" />
+          <img src={singleProd3} alt="singleProd3" />
         </div>
         <div className={styles.spriteImage}>
           <div>
             <div>
-              <img src={spriteImage1} alt="" />
+              <img src={spriteImage1} alt="spriteImage1" />
             </div>
             <div>
               <h3>100% Certified & Free Shipping</h3>
@@ -115,7 +114,7 @@ export default function Detail() {
           </div>
           <div>
             <div>
-              <img src={spriteImage2} alt="" />
+              <img src={spriteImage2} alt="spriteImage2" />
             </div>
             <div>
               <h3>15 Day Money-Back</h3>
@@ -124,7 +123,7 @@ export default function Detail() {
           </div>
           <div>
             <div>
-              <img src={spriteImage3} alt="" />
+              <img src={spriteImage3} alt="spriteImage3" />
             </div>
             <div>
               <h3>Lifetime Exchange</h3>
@@ -133,7 +132,7 @@ export default function Detail() {
           </div>
           <div>
             <div>
-              <img src={spriteImage4} alt="" />
+              <img src={spriteImage4} alt="spriteImage4" />
             </div>
             <div>
               <h3>One Year Replacement Warranty</h3>

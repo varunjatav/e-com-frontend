@@ -7,22 +7,25 @@ import { useNavigate } from "react-router-dom";
 export const AppContext = React.createContext();
 
 export default function AuthContextProvider({ children }) {
-  //
   let token = localStorage.getItem("token");
   let signUpUser = JSON.parse(localStorage.getItem("sign_up_user"));
+
      console.log("token from auth context", token);
-  const [currentUser, setCurrentUser] = useState(() => token || null);
+  const [currentUser, setCurrentUser] = useState(token);
   let [data, setData] = useState([]);
   const [pselect,setPselect] = useState(1);
   const [categ,setCateg] = useState("all");
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const [datas, setDatas] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [status, setStatus] = useState(false);
+  const [authToken, setAuthToken] = useState(currentUser);
+  // useEffect(() => {
+  //   setCurrentUser(token);
+  // }, [token]);
 
-  useEffect(() => {
-    setCurrentUser(token);
-  }, [currentUser]);
-
-
+console.log("current user from app context: ", currentUser);
   // signup function
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
@@ -41,7 +44,7 @@ export default function AuthContextProvider({ children }) {
       }else{
         // setCurrentUser(res.data.token);
         console.log(res.data.user);
-        localStorage.setItem("sign_up_user",JSON.stringify(res.data.user)); // Save token to localStorage
+        localStorage.setItem("sign_up_user",JSON.stringify(res.data.user.firstName + " " +res.data.user.lastName)); 
       }
      
     } catch (error) {
@@ -58,10 +61,8 @@ export default function AuthContextProvider({ children }) {
         email,
         password,
       });
-      
-      setCurrentUser(response.data.token);
-     
       localStorage.setItem("token", response.data.token); // Save token to localStorage
+      setAuthToken(response.data.token); // Update authToken state
     } catch (error) {
       console.error(error);
     }
@@ -92,7 +93,7 @@ export default function AuthContextProvider({ children }) {
   async function Logout() {
     localStorage.removeItem("token");
     setCurrentUser(null);
-    
+    setAuthToken(null)
   }
 
 
@@ -145,7 +146,7 @@ export default function AuthContextProvider({ children }) {
 
   // search data
   const searchData = async() => {
-    console.log(query);
+    // console.log(query);
     let resp;
     if (query === "") {
        resp = await fetch(`http://localhost:8000/jwellery`);
@@ -167,7 +168,7 @@ export default function AuthContextProvider({ children }) {
       body: JSON.stringify({ _id: productId }),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${currentUser}`
+        'Authorization': `Bearer ${authToken}`
       }
       
     })
@@ -176,8 +177,66 @@ export default function AuthContextProvider({ children }) {
     }
 
     let responseData = await res.json(); // Parse the JSON response
-    console.log(responseData);
+    setStatus(!status); // Trigger re-fetch of cart items
   }
+
+  // get total ammount
+  function getTotal(data) {
+    let totalam = 0;
+    for (let i = 0; i < data.length; i++) {
+      totalam += data[i].product.price;
+    }
+    setTotal(totalam);
+    localStorage.setItem("totalAmount",totalam)
+  }
+
+ 
+  // get cart information
+  useEffect(() => {
+    async function getCart() {
+      let res = await fetch("http://localhost:8000/cart/",{
+        method: "GET",
+          headers:{
+            "content-type": "application/json",
+            "Authorization": `Bearer ${authToken}`
+          }
+        
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      let data1 = await res.json();
+      // console.log(data1);
+      setDatas(data1.items);
+      await getTotal(data1.items);
+    }
+    if(authToken){
+      getCart();
+    }
+    
+  }, [authToken, status]);
+
+
+  const deleteCart = async (productId) => {
+    console.log("delete function auth token: ",authToken);
+    try {
+      let res = await fetch(`http://localhost:8000/cart/delete/${productId}`, {
+        method: "Delete",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+      }
+      });
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status} ${res.statusText}`);
+    }
+      setStatus(!status);
+    } catch (error) {
+      console.error('Failed to delete cart item:', error);
+    }
+ 
+  };
+
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -188,6 +247,7 @@ export default function AuthContextProvider({ children }) {
 
   const value = {
     currentUser,
+    setCurrentUser,
     Signup,
     Login,
     Logout,
@@ -204,7 +264,12 @@ export default function AuthContextProvider({ children }) {
     query,
     searchData,
     changeCateg,
-    addtocart
+    addtocart,
+    datas,
+    total,
+    deleteCart,
+    authToken,
+    setAuthToken
     //  emailverify
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

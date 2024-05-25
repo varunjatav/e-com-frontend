@@ -1,21 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styles from "./singleitem.module.css"
 import { useNavigate } from "react-router-dom"
+import { AppContext } from "../../context/AppContext";
+
 
 const SingleProduct = (props) => {
     const { _id, image, price, name, shipping, star, category } = props;
+    const { addtocart } = useContext(AppContext);
    const navigate = useNavigate()
 
-    const addtocart = async () => {
-        // let res = await fetch(`http://localhost:8080/cart`, {
-        let res = await fetch(`http://localhost:8000/cart/add`, {
-            method: "POST",
-            body: JSON.stringify({ ...props }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-    }
 
  const navigatefun = () => {
     navigate(`/product/${_id}`)
@@ -42,7 +35,7 @@ const addtowishlist =  async () => {
                 </div>
                 <p>{name}</p>
                 <div className={styles.single__buttondiv}>
-                    <button onClick={() => addtocart()}>Cart</button>
+                    <button onClick={() => addtocart(_id)}>Cart</button>
                     <button onClick={navigatefun}>Details</button> 
             </div>
         </div> 

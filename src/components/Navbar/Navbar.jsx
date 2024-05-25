@@ -8,19 +8,20 @@ import { AppContext } from "../../context/AppContext";
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
-  const { Logout, currentUser, query, setQuery ,searchData} = useContext(AppContext);
-  const [token, setToken] = useState(null);
-
- console.log(currentUser, "navbar");
+  const { Logout, currentUser, datas, setQuery ,searchData, authToken, setAuthToken} = useContext(AppContext);
+ 
+  let token = localStorage.getItem("token");
+console.log("data from navbar",datas);
+  // console.log("token from navbar",token);
+  // console.log("current user from navbar",currentUser );
+  console.log("auth token from navbar",authToken);
 
   useEffect(() => {
-    setToken(currentUser);
-  }, [token]);
-
-
+    setAuthToken(token)
+  },[token])
 
   return (
-    <div className={styles.navbar__outermain_div}>
+    <header className={styles.navbar__outermain_div} id="navbar">
       <div className={styles.navbar__maincontainer}>
         <div className={styles.navbar__logodiv}>
           {toggle ? (
@@ -84,7 +85,7 @@ const Navbar = () => {
               : styles.navbar__mainthirdpart
           }
         >
-          {currentUser === null ? (
+          {authToken  === null ? (
             <li>
               <RouterLink to={"/login"}>
                 <i
@@ -99,7 +100,7 @@ const Navbar = () => {
             currentUser && currentUser.displayName
           )}
 
-          {currentUser === null ? (
+          {authToken  === null ? (
             <li>
               <RouterLink to={"/signup"}>
                 <i
@@ -127,10 +128,13 @@ const Navbar = () => {
           </li>
           <li>
             <RouterLink to={"/cart"}>
+              
               {" "}
               <i
                 className={`fa-solid fa-bag-shopping ${styles.navbar__mainthirdpart_icon}`}
-              ></i>
+              >
+                {datas.length > 0 && <span style={{position:"relative", bottom:"10px", backgroundColor:"red", color:"white", borderRadius:"50%", padding:"1px 5px", fontSize:"small"}}>{datas.length}</span>}
+              </i>
             </RouterLink>
           </li>
         </ul>
@@ -259,7 +263,7 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </header>
   );
 };
 
