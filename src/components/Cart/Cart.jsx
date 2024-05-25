@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./Cart.module.css";
 import wishlist from "../../assets/wishlist.png";
 import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
+import { AppContext } from "../../context/AppContext";
 
 
 const Cart = () => {
   const [status, setStatus] = useState(false);
   const [datas, setDatas] = useState([]);
   const [total, setTotal] = useState(0);
+  const {currentUser } = useContext(AppContext);
   
   const deleteCart = async (id) => {
     // let res = await fetch(`http://localhost:8080/cart/${id}`, {
@@ -21,7 +23,7 @@ const Cart = () => {
   function getTotal(data) {
     let totalam = 0;
     for (let i = 0; i < data.length; i++) {
-      totalam += data[i].price;
+      totalam += data[i].product.price;
     }
     setTotal(totalam);
     localStorage.setItem("totalAmount",totalam)
@@ -30,15 +32,26 @@ const Cart = () => {
   useEffect(() => {
     async function getCart() {
       // let res = await fetch("http://localhost:8080/cart");
-      let res = await fetch("https://blackpearl.onrender.com/cart");
+      let res = await fetch("http://localhost:8000/cart/",{
+        method: "GET",
+          headers:{
+            "content-type": "application/json",
+            "Authorization": `Bearer ${currentUser}`
+          }
+        
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
       let data1 = await res.json();
-      setDatas(data1);
-      await getTotal(data1);
+      console.log(data1);
+      setDatas(data1.items);
+      await getTotal(data1.items);
     }
 
     getCart();
-  }, [status]);
-
+  }, [currentUser]);
+console.log(datas);
   if (datas.length === 0) {
     return (
       <div className={styles.emptyWishlistMain}>
@@ -54,31 +67,31 @@ const Cart = () => {
   }
 
   return (
-    <div className={styles.wishlistMain}>
-      <h2>Your Cart</h2>
-      <h3 className={styles.cart__totaltext}>Total amount : {total}</h3>
-      <div className={styles.wishListDetails}>
-        {datas.map((data) => (
-          <div key={data.id} className={styles.single__maindiv}>
-            <img className={styles.single__image} src={data.image} alt="name" />
+   <div className={styles.wishlistMain}>
+     <h2>Your Cart</h2>
+     <h3 className={styles.cart__totaltext}>Total amount : {total}</h3>
+     <div className={styles.wishListDetails}>
+       {datas.map((data) => (
+         <div key={data.id} className={styles.single__maindiv}>
+           <img className={styles.single__image} src={data.product.image} alt="name" />
 
-            <p className={styles.single__pricetag}>&#8377; {data.price}</p>
+           <p className={styles.single__pricetag}>&#8377; {data.product.price}</p>
 
-            <p className={styles.single__nametag}>{data.name}</p>
-            <div className={styles.single__buttondiv}>
-              <button onClick={() => deleteCart(data.id)}>
-                Remove From Cart
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className={styles.single__buttondiv}>
+           <p className={styles.single__nametag}>{data.name}</p>
+           <div className={styles.single__buttondiv}>
+             <button onClick={() => deleteCart(data.id)}>
+               Remove From Cart
+             </button>
+           </div>
+         </div>
+       ))}
+     </div>
+     <div className={styles.single__buttondiv}>
 
-        <RouterLink to={"/address"}> <button className={styles.cart__proceedButton} >Proced to Checkout</button></RouterLink>
-      </div>
+      <RouterLink to={"/address"}> <button className={styles.cart__proceedButton} >Proced to Checkout</button></RouterLink>
     </div>
-  );
+  </div>
+   );
 };
 
 export default Cart;

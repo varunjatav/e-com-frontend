@@ -160,11 +160,11 @@ export default function AuthContextProvider({ children }) {
   }
 
 // add to cart not working now (needed)
-  const addtocart = async () => {
+  const addtocart = async (productId) => {
     
     let res = await fetch(`http://localhost:8000/cart/add`, {
       method: "POST",
-      body: JSON.stringify({ ...data }),
+      body: JSON.stringify({ _id: productId }),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${currentUser}`
