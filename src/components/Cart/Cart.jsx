@@ -1,20 +1,13 @@
 import React, { useContext } from "react";
 import styles from "./Cart.module.css";
 import wishlist from "../../assets/wishlist.png";
-import { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 
 
 const Cart = () => {
-  
-  
- 
   const { datas, total, deleteCart } = useContext(AppContext);
-  
 
-
-console.log(datas);
   if (datas.length === 0) {
     return (
       <div className={styles.emptyWishlistMain}>

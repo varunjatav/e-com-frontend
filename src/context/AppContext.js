@@ -10,7 +10,7 @@ export default function AuthContextProvider({ children }) {
   let token = localStorage.getItem("token");
   let signUpUser = JSON.parse(localStorage.getItem("sign_up_user"));
 
-     console.log("token from auth context", token);
+     
   const [currentUser, setCurrentUser] = useState(token);
   let [data, setData] = useState([]);
   const [pselect,setPselect] = useState(1);
@@ -25,7 +25,7 @@ export default function AuthContextProvider({ children }) {
   //   setCurrentUser(token);
   // }, [token]);
 
-console.log("current user from app context: ", currentUser);
+console.log("authToken from app context: ", authToken);
   // signup function
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
@@ -93,7 +93,9 @@ console.log("current user from app context: ", currentUser);
   async function Logout() {
     localStorage.removeItem("token");
     setCurrentUser(null);
-    setAuthToken(null)
+    setAuthToken(null);
+    setDatas([]); // Clear cart items
+    setTotal(0); // Reset total amount  
   }
 
 

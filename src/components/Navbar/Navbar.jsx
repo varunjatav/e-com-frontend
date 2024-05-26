@@ -11,10 +11,7 @@ const Navbar = () => {
   const { Logout, currentUser, datas, setQuery ,searchData, authToken, setAuthToken} = useContext(AppContext);
  
   let token = localStorage.getItem("token");
-console.log("data from navbar",datas);
-  // console.log("token from navbar",token);
-  // console.log("current user from navbar",currentUser );
-  console.log("auth token from navbar",authToken);
+
 
   useEffect(() => {
     setAuthToken(token)
