@@ -18,7 +18,7 @@ import { AppContext } from "../../context/AppContext";
 export default function Detail() {
   const [data, setData] = useState({});
   const { id } = useParams();
-  const { addtocart } = useContext(AppContext);
+  const { addtocart , authToken } = useContext(AppContext);
 
   // console.log(id);
 
@@ -35,11 +35,12 @@ export default function Detail() {
 
   const addtowishlist = async () => {
     // let res = await fetch(`http://localhost:8080/wishlist`, {
-    let res = await fetch(`https://blackpearl.onrender.com/wishlist`, {
+    let res = await fetch(`http://localhost:3000/wishlist/add`, {
       method: "POST",
-      body: JSON.stringify({ ...data }),
+      body: JSON.stringify({ _id: id }),
       headers: {
         "Content-Type": "application/json",
+        "Authorization": ` Bearer ${authToken}`
       },
     });
   };

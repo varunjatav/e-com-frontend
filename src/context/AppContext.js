@@ -96,7 +96,8 @@ console.log("authToken from app context: ", authToken);
     setCurrentUser(null);
     setAuthToken(null);
     setDatas([]); // Clear cart items
-    setTotal(0); // Reset total amount  
+    setTotal(0); // Reset total amount 
+    localStorage.removeItem("totalAmount"); 
   }
 
 
