@@ -72,7 +72,7 @@ export default function Login() {
               </div>
               <input ref={passRef} style={{ marginLeft: "0rem", marginTop: "0.5rem", width: "87%", height: "2rem", borderColor: "rgb(173, 169, 173)", borderRadius: "0.4rem", backgroundColor: "white", outline: "none", border: "1px solid rgb(222, 87, 229)", padding: "0.5rem" }} type={showPassword ?"text":"password"} placeholder='Enter password' />
               <div
-                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer" }}
+                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer", width:"10px" }}
                 onClick={() => setShowPassword(!showPassword)}
               >
                  {showPassword ? <ViewIcon /> : <ViewOffIcon />}

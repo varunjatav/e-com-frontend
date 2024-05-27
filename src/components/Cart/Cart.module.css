@@ -3,10 +3,6 @@
   padding-bottom: 10rem;
 }
 
-.wishListDetails img {
-  width: 60%;
-}
-
 .emptyYourWishlist > h2 {
   color: #231535;
   font-family: "BegumRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -32,38 +28,35 @@
   display: flex;
   justify-content: center;
 }
-
-.single__maindiv {
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.single__image {
-  width: 100%;
-}
-
-.wishListDetails {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-}
-
-.single__buttondiv {
-  display: flex;
+.wishList_container {
   width: 80%;
-  justify-content: center;
   margin: auto;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-
-.single__buttondiv button {
+.single__maindiv {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.quantityHandler {
+  display: flex;
+  align-items: center;
+}
+.quantityHandler > button {
   background: linear-gradient(to right, #fff6c8 0%, #ffd7f5 48%);
   padding: 0.3rem 1rem;
   margin: 0.4rem auto;
-  border-radius: 0.4rem;
+  border-radius: 3px;
+}
+.quantityHandler > p {
+  padding: 0 10px;
 }
 
-.single__buttondiv button:hover {
+.quantityHandler > button:hover {
   background: linear-gradient(
       to right,
       rgb(222, 87, 229) 0%,
@@ -72,8 +65,47 @@
     0px 0px / auto;
 }
 
+.single__image {
+  width: 130px;
+  height: 130px;
+}
+
+.wishListDetails {
+  width: 70%;
+}
+.product_details {
+  text-align: left;
+}
+.amt_details {
+  width: 30%;
+  height: 400px;
+  text-align: left;
+  padding: 0 10px;
+}
+.amt_details > div{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.amt_details > div > p{
+  color: rgb(131, 127, 127);
+  font-size: small;
+  margin-bottom: 10px;
+}
+.amt_details > div > span{
+  font-size: small;
+}
+.category {
+  margin-bottom: 5px;
+  color: rgb(187, 185, 185);
+  font-weight: 100;
+  font-size: x-small;
+}
+
+
+
 .single__pricetag {
-  font-size: 1.4rem;
+  font-size: 1rem;
 }
 
 .single__anchor {
@@ -94,13 +126,26 @@
   color: red;
 }
 
-.cart__totaltext{
+.cart__totaltext {
   text-align: center;
   margin-bottom: 1rem;
 }
 
-.cart__proceedButton{
+.cart__proceedButton {
+  background: linear-gradient(to right, #fff6c8 0%, #ffd7f5 48%);
+  padding: 0.3rem 1rem;
+  margin: 0.4rem auto;
+  border-radius: 0.4rem;
   color: black;
+  text-decoration: none;
+}
+.cart__proceedButton:hover {
+  background: linear-gradient(
+      to right,
+      rgb(222, 87, 229) 0%,
+      rgb(136, 99, 251) 100%
+    )
+    0px 0px / auto;
 }
 
 @media screen and (max-width: 990px) {

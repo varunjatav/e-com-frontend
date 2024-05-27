@@ -21,6 +21,7 @@ export default function AuthContextProvider({ children }) {
   const [total, setTotal] = useState(0);
   const [status, setStatus] = useState(false);
   const [authToken, setAuthToken] = useState(currentUser);
+  // const [qty, setQty] = useState(1);
   // useEffect(() => {
   //   setCurrentUser(token);
   // }, [token]);
@@ -192,7 +193,12 @@ console.log("authToken from app context: ", authToken);
     localStorage.setItem("totalAmount",totalam)
   }
 
- 
+//  getQuantity
+// function getQuantity(data) {
+//   for (let i = 0; i < data.length; i++) {
+//      console.log(data[i].quantity);
+//   }
+// }
   // get cart information
   useEffect(() => {
     async function getCart() {

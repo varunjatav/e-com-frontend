@@ -15,7 +15,7 @@ export default function Signup() {
   const passRef = useRef(null);
   const cpassRef = useRef(null);
 
-  const { Signup , currentUser } = useContext(AppContext);
+  const { Signup, currentUser } = useContext(AppContext);
   const [iterror, setIterror] = useState("");
   const navigate = useNavigate();
 
@@ -32,7 +32,13 @@ export default function Signup() {
     if (strength) {
       try {
         setIterror("");
-        await Signup(mobileNumberRef.current.value, emailRef.current.value, firstNameRef.current.value, lastNameRef.current.value, passRef.current.value);
+        await Signup(
+          mobileNumberRef.current.value,
+          emailRef.current.value,
+          firstNameRef.current.value,
+          lastNameRef.current.value,
+          passRef.current.value
+        );
         // await updateprofilename(firstNameRef.current.value , lastNameRef.current.value);
         // await emailverify();
         navigate("/");
@@ -116,7 +122,7 @@ export default function Signup() {
             <div style={{ marginTop: "1rem" }}>
               <div style={{ marginLeft: "-14rem" }}>Mobile Number</div>
               <input
-              ref={mobileNumberRef}
+                ref={mobileNumberRef}
                 style={{
                   marginLeft: "0rem",
                   marginTop: "0.5rem",
@@ -153,13 +159,13 @@ export default function Signup() {
                 type="email"
               />
             </div>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent:"center", width:"94%", margin:"auto"}}>
               <div style={{ marginTop: "1rem" }}>
                 <div style={{ marginLeft: "-4.5rem" }}>First Name</div>
                 <input
                   ref={firstNameRef}
                   style={{
-                    marginLeft: "1rem",
+                    // marginLeft: "1rem",
                     marginTop: "0.5rem",
                     width: "85%",
                     height: "2rem",
@@ -177,9 +183,9 @@ export default function Signup() {
               <div style={{ marginTop: "1rem" }}>
                 <div style={{ marginLeft: "-4.5rem" }}>Last Name</div>
                 <input
-                ref={lastNameRef} 
+                  ref={lastNameRef}
                   style={{
-                    marginLeft: "-0.1rem",
+                    // marginLeft: "-0.1rem",
                     marginTop: "0.5rem",
                     width: "85%",
                     height: "2rem",
@@ -214,12 +220,17 @@ export default function Signup() {
                 placeholder="Password"
                 type={showPassword ? "text" : "password"}
               />
-              <p
-                style={{ textAlign: "left", paddingLeft: "2rem" }}
+              <div
+                style={{
+                  textAlign: "left",
+                  paddingLeft: "2rem",
+                  cursor: "pointer",
+                  width: "10px",
+                }}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-              </p>
+              </div>
             </div>
             <div style={{ marginTop: "1rem" }}>
               <div style={{ marginLeft: "-12.7rem" }}>Confirm Password</div>
@@ -240,21 +251,19 @@ export default function Signup() {
                 placeholder="Confirm Password"
                 type={showcPassword ? "text" : "password"}
               />
-              <p
-                style={{ textAlign: "left", paddingLeft: "2rem" }}
+              <div
+                 style={{
+                  textAlign: "left",
+                  paddingLeft: "2rem",
+                  cursor: "pointer",
+                  width: "10px",
+                }}
                 onClick={() => setShowcPassword(!showcPassword)}
               >
                 {showcPassword ? <ViewIcon /> : <ViewOffIcon />}
-              </p>
+              </div>
             </div>
-            <div style={{ margin: "auto", marginTop: "1rem" }}>
-              <input type="radio" name="gender" />
-              <label> Male </label>
-              <input type="radio" name="gender" />
-              <label> Female </label>
-              <input type="radio" name="gender" />
-              <label> I don't want to specify </label>
-            </div>
+           
             <div
               style={
                 strong
@@ -291,24 +300,7 @@ export default function Signup() {
             >
               {iterror}
             </div>
-            <div
-              style={{
-                height: "auto",
-                backgroundColor: "#EFF5EC",
-                borderRadius: "1rem",
-                width: "84.3%",
-                margin: "auto",
-                marginTop: "1rem",
-                padding: "0.5rem",
-              }}
-            >
-              <h3>Opt for Whatsapp Support</h3>
-              <p>
-                We will be sharing Delivery & precious order related
-                communication. Also provide you with an interactive whatsapp
-                support
-              </p>
-            </div>
+            
             <div
               style={{
                 height: "auto",
@@ -334,7 +326,7 @@ export default function Signup() {
               </RouterLink>
             </div>
           </div>
-          {currentUser === null ? "Please Enter Valid Details": ""}
+         
         </form>
       </div>
     </div>

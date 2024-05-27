@@ -101,7 +101,12 @@ const Forgot = () => {
                 placeholder="Enter Old Password"
               />
                 <div
-                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer" }}
+               style={{
+                textAlign: "left",
+                paddingLeft: "2rem",
+                cursor: "pointer",
+                width: "10px",
+              }}
                 onClick={() => setShowOldPassword(!showOldPassword)}
               >
                  {showOldPassword ? <ViewIcon /> : <ViewOffIcon />}
@@ -130,7 +135,12 @@ const Forgot = () => {
                 placeholder="Enter New Password"
               />
                <div
-                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer" }}
+               style={{
+                textAlign: "left",
+                paddingLeft: "2rem",
+                cursor: "pointer",
+                width: "10px",
+              }}
                 onClick={() => setShowNewPassword(!showNewPassword)}
               >
                  {showNewPassword ? <ViewIcon /> : <ViewOffIcon />}
@@ -159,7 +169,12 @@ const Forgot = () => {
                 placeholder="Confirm New Password"
               />
               <div
-                style={{ textAlign: "left", paddingLeft: "2rem" ,cursor: "pointer" }}
+                style={{
+                  textAlign: "left",
+                  paddingLeft: "2rem",
+                  cursor: "pointer",
+                  width: "10px",
+                }}
                 onClick={() => setShowcNewPassword(!showcNewPassword)}
               >
                  {showcNewPassword ? <ViewIcon /> : <ViewOffIcon />}
