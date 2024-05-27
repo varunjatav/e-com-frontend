@@ -187,19 +187,12 @@ console.log("authToken from app context: ", authToken);
   function getTotal(data) {
     let totalam = 0;
     for (let i = 0; i < data.length; i++) {
-      totalam += data[i].product.price;
+      totalam += data[i].product.price * data[i].quantity;
     }
     setTotal(totalam);
     localStorage.setItem("totalAmount",totalam)
   }
 
-//  getQuantity
-// function getQuantity(data) {
-//   for (let i = 0; i < data.length; i++) {
-//      console.log(data[i].quantity);
-//   }
-// }
-  // get cart information
   useEffect(() => {
     async function getCart() {
       let res = await fetch("http://localhost:8000/cart/",{
@@ -226,7 +219,7 @@ console.log("authToken from app context: ", authToken);
 
 
   const deleteCart = async (productId) => {
-    console.log("delete function auth token: ",authToken);
+    // console.log("delete function auth token: ",authToken);
     try {
       let res = await fetch(`http://localhost:8000/cart/delete/${productId}`, {
         method: "Delete",
@@ -244,6 +237,24 @@ console.log("authToken from app context: ", authToken);
     }
  
   };
+
+  const decrementCart = async(productId) => {
+    try {
+      let res = await fetch(`http://localhost:8000/cart/decrement/${productId}`, {
+        method: "Delete",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+      }
+      });
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status} ${res.statusText}`);
+    }
+      setStatus(!status);
+    } catch (error) {
+      console.error('Failed to delete cart item:', error);
+    }
+  }
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -277,7 +288,8 @@ console.log("authToken from app context: ", authToken);
     total,
     deleteCart,
     authToken,
-    setAuthToken
+    setAuthToken,
+    decrementCart
     //  emailverify
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -3,29 +3,10 @@ import styles from "./Cart.module.css";
 import wishlist from "../../assets/wishlist.png";
 import { Link as RouterLink } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
+import { DeleteIcon } from "@chakra-ui/icons"
 
 const Cart = () => {
-  const { datas, total, deleteCart } = useContext(AppContext);
-  const [quantities, setQuantities] = useState([]);
-
-  useEffect(() => {
-    setQuantities(datas.map(data => data.quantity));
-  }, [datas]);
-
-
-  const increment = (index) => {
-    const newQuantities = [...quantities];
-    newQuantities[index] += 1;
-    setQuantities(newQuantities);
-  };
-console.log(quantities);
-  const decrement = (index) => {
-    const newQuantities = [...quantities];
-    if (newQuantities[index] > 1) {
-      newQuantities[index] -= 1;
-    }
-    setQuantities(newQuantities);
-  };
+  const { datas, total, deleteCart ,addtocart, decrementCart} = useContext(AppContext);
   
   if (datas.length === 0) {
     return (
@@ -47,10 +28,11 @@ console.log(quantities);
       <h3 className={styles.cart__totaltext}>Total amount : {total}</h3>
       <div className={styles.wishList_container}>
         <div className={styles.wishListDetails}>
-          {datas.map((data, index) => (
+          {datas.map((data) => (
             <div key={data.product.id} className={styles.single__maindiv}>
               <div
-                style={{ display: "flex", gap: "15px", alignItems: "center" }}
+              className={styles.imageAndName}
+              
               >
                 <img
                   className={styles.single__image}
@@ -67,26 +49,26 @@ console.log(quantities);
                   </p>
                 </div>
               </div>
+
+              <div className={styles.right_details}>
               <div className={styles.quantityHandler}>
-              <button onClick={() => decrement(index)}>-</button>
-                <p>{quantities[index]}</p>
-                <button onClick={() => increment(index)}>+</button>
+              <button onClick={() => decrementCart(data.product._id)}>-</button>
+                <p>{data.quantity}</p>
+                <button onClick={() => addtocart(data.product._id)}>+</button>
               </div>
               <div>
                 <p className={styles.single__pricetag}>
-                  &#8377; {data.product.price}
+                  &#8377; {data.product.price  * data.quantity}
                 </p>
-              </div>
-
-              <div>
-                <p className={styles.single__nametag}>{data.name}</p>
               </div>
 
               <div className={styles.single__buttondiv}>
                 <button onClick={() => deleteCart(data.product._id)} className={styles.cart__proceedButton}>
-                  Remove From Cart
+                <DeleteIcon/>
                 </button>
               </div>
+              </div>
+
             </div>
           ))}
         </div>
