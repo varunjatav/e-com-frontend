@@ -19,7 +19,7 @@ export default function AuthContextProvider({ children }) {
   const [datas, setDatas] = useState([]);
   const [total, setTotal] = useState(0);
   const [status, setStatus] = useState(false);
-  const [authToken, setAuthToken] = useState(currentUser);
+  let [authToken, setAuthToken] = useState(currentUser);
   const [wishListData, setWishListData] = useState([]);
 
   // console.log("authToken from app context: ", authToken);
