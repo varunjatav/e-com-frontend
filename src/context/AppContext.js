@@ -51,20 +51,43 @@ export default function AuthContextProvider({ children }) {
     }
   }
 
-  // login function
-  async function Login(email, password) {
-    try {
-      // console.log(email, password);
-      const response = await axios.post("http://localhost:8000/auth/login", {
-        email,
-        password,
-      });
-      localStorage.setItem("token", response.data.token); // Save token to localStorage
-      setAuthToken(response.data.token); // Update authToken state
-    } catch (error) {
-      console.error(error);
+    // login function
+    async function Login(email, password) {
+      try {
+        // console.log(email, password);
+        const response = await axios.post("http://localhost:8000/auth/login", {
+          email,
+          password,
+        });
+        localStorage.setItem("token", response.data.token); // Save token to localStorage
+        localStorage.setItem("refreshToken", response.data.refreshToken);// Save refresh token to localStorage
+        setAuthToken(response.data.token); // Update authToken state
+      } catch (error) {
+        console.error(error);
+      }
     }
-  }
+
+    // refresh token 
+    async function RefreshToken() {
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const response = await axios.post("http://localhost:8000/auth/refresh-token", {
+          refreshToken,
+        });
+        
+        // Update the access token in local storage
+        localStorage.setItem("token", response.data.token);
+        
+        // Set the new access token as the default authorization header for Axios
+        setAuthToken(response.data.token); 
+    
+        return response.data.token;
+    
+      } catch (error) {
+        console.error('Error refreshing token:', error);
+      }
+    }
+    
 
   // not working now (not needed)
   function updateprofilename(name) {
@@ -175,6 +198,9 @@ export default function AuthContextProvider({ children }) {
 
   // add to cart not working now (needed)
   const addtocart = async (productId) => {
+    if(!authToken){
+      authToken = await RefreshToken(); // refresh token
+    }
     try {
       let res = await fetch(`http://localhost:8000/cart/add`, {
         method: "POST",
@@ -191,7 +217,7 @@ export default function AuthContextProvider({ children }) {
       let responseData = await res.json(); // Parse the JSON response
       setStatus(!status);
     } catch (error) {
-console.error("error from add to cart app context: ", error.message);
+       console.error("error from add to cart app context: ", error.message);
     }
  // Trigger re-fetch of cart items
   };
@@ -208,6 +234,9 @@ console.error("error from add to cart app context: ", error.message);
 
   useEffect(() => {
     async function getCart() {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch("http://localhost:8000/cart/", {
         method: "GET",
         headers: {
@@ -230,6 +259,9 @@ console.error("error from add to cart app context: ", error.message);
 
   const deleteCart = async (productId) => {
     try {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch(`http://localhost:8000/cart/delete/${productId}`, {
         method: "Delete",
         headers: {
@@ -248,6 +280,9 @@ console.error("error from add to cart app context: ", error.message);
 
   const decrementCart = async (productId) => {
     try {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch(
         `http://localhost:8000/cart/decrement/${productId}`,
         {
@@ -270,6 +305,9 @@ console.error("error from add to cart app context: ", error.message);
   // add to wishlist
   const addtowishlist = async (productId) => {
     try {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch(`http://localhost:8000/wishlist/add`, {
         method: "POST",
         body: JSON.stringify({ _id: productId }),
@@ -292,6 +330,9 @@ console.error("error from add to cart app context: ", error.message);
   useEffect(() => {
   async function getWishList() {
     try {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch("http://localhost:8000/wishlist/", {
         method: "GET",
         headers: {
@@ -324,6 +365,9 @@ console.error("error from add to cart app context: ", error.message);
   // delete from wishlist
   const deleteWishlist = async (id) => {
     try {
+      if(!authToken){
+        authToken = await RefreshToken(); // refresh token
+      }
       let res = await fetch(`http://localhost:8000/wishlist/delete/${id}`, {
         method: "Delete",
         headers: {
@@ -375,7 +419,6 @@ console.error("error from add to cart app context: ", error.message);
     setAuthToken,
     decrementCart,
     addtowishlist,
-    // getWishList,
     deleteWishlist,
     wishListData,
   };
