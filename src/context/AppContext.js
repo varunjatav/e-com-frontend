@@ -10,23 +10,19 @@ export default function AuthContextProvider({ children }) {
   let token = localStorage.getItem("token");
   let signUpUser = JSON.parse(localStorage.getItem("sign_up_user"));
 
-     
   const [currentUser, setCurrentUser] = useState(token);
   let [data, setData] = useState([]);
-  const [pselect,setPselect] = useState(1);
-  const [categ,setCateg] = useState("all");
+  const [pselect, setPselect] = useState(1);
+  const [categ, setCateg] = useState("all");
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
   const [total, setTotal] = useState(0);
   const [status, setStatus] = useState(false);
   const [authToken, setAuthToken] = useState(currentUser);
-  // const [qty, setQty] = useState(1);
-  // useEffect(() => {
-  //   setCurrentUser(token);
-  // }, [token]);
+  const [wishListData, setWishListData] = useState([]);
 
-console.log("authToken from app context: ", authToken);
+  // console.log("authToken from app context: ", authToken);
   // signup function
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
@@ -39,20 +35,21 @@ console.log("authToken from app context: ", authToken);
         password,
       });
 
-      if(res.status >= 400 && res.status <=499){
+      if (res.status >= 400 && res.status <= 499) {
         setCurrentUser(null);
         // console.log(res.data);
-      }else{
+      } else {
         // setCurrentUser(res.data.token);
-        console.log(res.data.user);
-        localStorage.setItem("sign_up_user",JSON.stringify(res.data.user.firstName + " " +res.data.user.lastName)); 
+        // console.log(res.data.user);
+        localStorage.setItem(
+          "sign_up_user",
+          JSON.stringify(res.data.user.firstName + " " + res.data.user.lastName)
+        );
       }
-     
     } catch (error) {
       console.log(error);
     }
   }
-
 
   // login function
   async function Login(email, password) {
@@ -67,9 +64,7 @@ console.log("authToken from app context: ", authToken);
     } catch (error) {
       console.error(error);
     }
-   
   }
- 
 
   // not working now (not needed)
   function updateprofilename(name) {
@@ -83,106 +78,118 @@ console.log("authToken from app context: ", authToken);
         "http://localhost:8000/auth/send-password-reset",
         { email, oldpassword, newpassword, cnewpassword }
       );
-      
     } catch (error) {
       console.error(error);
     }
   }
 
-// logout function
+  // logout function
 
   async function Logout() {
     localStorage.removeItem("token");
     setCurrentUser(null);
     setAuthToken(null);
     setDatas([]); // Clear cart items
-    setTotal(0); // Reset total amount 
-    localStorage.removeItem("totalAmount"); 
+    setTotal(0); // Reset total amount
+    setWishListData([]);
+    localStorage.removeItem("totalAmount");
   }
 
-
-// fetching data
+  // fetching data
   const getData = async (category) => {
     let resp;
-    if (category === "all" || category === "ready" || category === "gifts" || category === "findstore") {
+    if (
+      category === "all" ||
+      category === "ready" ||
+      category === "gifts" ||
+      category === "findstore"
+    ) {
       resp = await fetch(`http://localhost:8000/jwellery`);
     } else {
-      resp = await fetch(`http://localhost:8000/jwellery/q/cat?category=${category}`);
+      resp = await fetch(
+        `http://localhost:8000/jwellery/q/cat?category=${category}`
+      );
     }
     let apiData = await resp.json();
-    setData(apiData)
-  }
-
+    setData(apiData);
+  };
 
   // sorting data
 
-  async function sorrtbygte(gte,lte ,category){
-    if(gte===0){
-      setPselect(1)
-    }else if(gte===5000){
-      setPselect(2) 
-    }else if(gte===10000){
-      setPselect(3)
-    }else if(gte===20000){
-      setPselect(4)
-    }else if(gte===30000){
-      setPselect(5) 
-    }else if(gte===40000){
-      setPselect(6)
+  async function sorrtbygte(gte, lte, category) {
+    if (gte === 0) {
+      setPselect(1);
+    } else if (gte === 5000) {
+      setPselect(2);
+    } else if (gte === 10000) {
+      setPselect(3);
+    } else if (gte === 20000) {
+      setPselect(4);
+    } else if (gte === 30000) {
+      setPselect(5);
+    } else if (gte === 40000) {
+      setPselect(6);
     }
-  
-  
+
     let resp;
-    if (category === "all" || category === "ready" || category === "gifts" || category === "findstore") {
-      resp = await fetch(`http://localhost:8000/jwellery/q/price?price_gte=${gte}&price_lte=${lte}`);
-      setCateg("all")
+    if (
+      category === "all" ||
+      category === "ready" ||
+      category === "gifts" ||
+      category === "findstore"
+    ) {
+      resp = await fetch(
+        `http://localhost:8000/jwellery/q/price?price_gte=${gte}&price_lte=${lte}`
+      );
+      setCateg("all");
     } else {
-      resp = await fetch(`http://localhost:8000/jwellery/q?category=${category}&price_gte=${gte}&price_lte=${lte}`);
+      resp = await fetch(
+        `http://localhost:8000/jwellery/q?category=${category}&price_gte=${gte}&price_lte=${lte}`
+      );
     }
     let apiData = await resp.json();
-    setData(apiData)
-  
+    setData(apiData);
   }
 
-  async function changeCateg(switchcateg){
-    navigate(`/newarrival/${switchcateg}`); 
+  async function changeCateg(switchcateg) {
+    navigate(`/newarrival/${switchcateg}`);
   }
 
   // search data
-  const searchData = async() => {
+  const searchData = async () => {
     // console.log(query);
     let resp;
     if (query === "") {
-       resp = await fetch(`http://localhost:8000/jwellery`);
+      resp = await fetch(`http://localhost:8000/jwellery`);
     } else {
-       resp = await fetch(`http://localhost:8000/jwellery/q/cat?category=${query}`);
-       changeCateg(query);
+      resp = await fetch(
+        `http://localhost:8000/jwellery/q/cat?category=${query}`
+      );
+      changeCateg(query);
     }
 
     let apiData = await resp.json();
     setData(apiData);
     setQuery("");
-  }
+  };
 
-// add to cart not working now (needed)
+  // add to cart not working now (needed)
   const addtocart = async (productId) => {
-    
     let res = await fetch(`http://localhost:8000/cart/add`, {
       method: "POST",
       body: JSON.stringify({ _id: productId }),
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      }
-      
-    })
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${authToken}`,
+      },
+    });
     if (!res.ok) {
       throw new Error(`HTTP error! Status: ${res.status}`);
     }
 
     let responseData = await res.json(); // Parse the JSON response
     setStatus(!status); // Trigger re-fetch of cart items
-  }
+  };
 
   // get total ammount
   function getTotal(data) {
@@ -191,18 +198,17 @@ console.log("authToken from app context: ", authToken);
       totalam += data[i].product.price * data[i].quantity;
     }
     setTotal(totalam);
-    localStorage.setItem("totalAmount",totalam)
+    localStorage.setItem("totalAmount", totalam);
   }
 
   useEffect(() => {
     async function getCart() {
-      let res = await fetch("http://localhost:8000/cart/",{
+      let res = await fetch("http://localhost:8000/cart/", {
         method: "GET",
-          headers:{
-            "content-type": "application/json",
-            "Authorization": `Bearer ${authToken}`
-          }
-        
+        headers: {
+          "content-type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
       });
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -212,51 +218,117 @@ console.log("authToken from app context: ", authToken);
       setDatas(data1.items);
       await getTotal(data1.items);
     }
-    if(authToken){
+    if (authToken) {
       getCart();
     }
-    
   }, [authToken, status]);
 
-
   const deleteCart = async (productId) => {
-    // console.log("delete function auth token: ",authToken);
     try {
       let res = await fetch(`http://localhost:8000/cart/delete/${productId}`, {
         method: "Delete",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-      }
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
       });
       if (!res.ok) {
         throw new Error(`Error: ${res.status} ${res.statusText}`);
-    }
+      }
       setStatus(!status);
     } catch (error) {
-      console.error('Failed to delete cart item:', error);
+      console.error("Failed to delete cart item:", error);
     }
- 
   };
 
-  const decrementCart = async(productId) => {
+  const decrementCart = async (productId) => {
     try {
-      let res = await fetch(`http://localhost:8000/cart/decrement/${productId}`, {
-        method: "Delete",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authToken}`
-      }
-      });
+      let res = await fetch(
+        `http://localhost:8000/cart/decrement/${productId}`,
+        {
+          method: "Delete",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${authToken}`,
+          },
+        }
+      );
       if (!res.ok) {
         throw new Error(`Error: ${res.status} ${res.statusText}`);
-    }
+      }
       setStatus(!status);
     } catch (error) {
-      console.error('Failed to delete cart item:', error);
+      console.error("Failed to delete cart item:", error);
+    }
+  };
+
+  // add to wishlist
+  const addtowishlist = async (productId) => {
+    try {
+      let res = await fetch(`http://localhost:8000/wishlist/add`, {
+        method: "POST",
+        body: JSON.stringify({ productId: productId }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": ` Bearer ${authToken}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`Error: ${res.statusText}`);
+      }
+      const data = await res.json();
+      // console.log(data);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error);
+    }
+  };
+  // get wishlist data
+  async function getWishList() {
+    try {
+      let res = await fetch("http://localhost:8000/wishlist/", {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
+      });
+      // Check if the response is not ok
+      if (!res.ok) {
+        if (res.status === 404) {
+          console.log("Wishlist not found");
+          setWishListData([]); // Set to an empty array if wishlist is not found
+          return;
+        } else {
+          throw new Error(`Error: ${res.statusText}`);
+        }
+      }
+
+      let data = await res.json();
+      // console.log("data: ", data);
+      setWishListData(data);
+    } catch (error) {
+      console.log("Error in fetching wishlist data: " + error);
     }
   }
+  // delete from wishlist
+  const deleteWishlist = async (id) => {
+    try {
+      let res = await fetch(`http://localhost:8000/wishlist/delete/${id}`, {
+        method: "Delete",
+        headers: {
+          "content-type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
+      });
 
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status} ${res.statusText}`);
+      }
+      setStatus(!status);
+    } catch (error) {
+      console.log("error deleting from wishlist: " + error.message);
+    }
+  };
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -290,8 +362,11 @@ console.log("authToken from app context: ", authToken);
     deleteCart,
     authToken,
     setAuthToken,
-    decrementCart
-    //  emailverify
+    decrementCart,
+    addtowishlist,
+    getWishList,
+    deleteWishlist,
+    wishListData,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

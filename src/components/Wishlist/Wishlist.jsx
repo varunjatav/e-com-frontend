@@ -1,45 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./Wishlist.module.css";
 import wishlist from "../../assets/wishlist.png";
 import { useEffect, useState } from "react";
+import { AppContext } from "../../context/AppContext";
 
 const Wishlist = () => {
-  const [status, setStatus] = useState(false);
-  console.log(setStatus);
-  const [datas, setDatas] = useState([]);
-  console.log(datas);
+  const {addtocart, status, getWishList ,wishListData, authToken , deleteWishlist} = useContext(AppContext);
 
-  const addtocart = async (data) => {
-    // let res = await fetch(`http://localhost:8080/cart`, {
-    // let res = await fetch(`https://blackpearl.onrender.com/cart`, {
-    //   method: "POST",
-    //   body: JSON.stringify({ ...data }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-    // console.log(res);
-  };
-
-  const deleteWishlist = async (id) => {
-    // let res = await fetch(`http://localhost:8080/wishlist/${id}`, {
-    // let res = await fetch(`https://blackpearl.onrender.com/wishlist/${id}`, {
-    //   method: "Delete",
-    // });
-    // setStatus(!status);
-  };
-
-  useEffect(() => {
-    async function getWishList() {
-      // let res = await fetch("http://localhost:8080/wishlist");
-      let res = await fetch("https://blackpearl.onrender.com/wishlist");
-      let data1 = await res.json();
-      setDatas(data1);
-    }
+  useEffect(() => {  
     getWishList();
-  }, [status]);
+  }, [authToken,status]);
 
-  if (datas.length === 0) {
+  console.log("wishListData : ",wishListData);
+
+  if (wishListData.length === 0 ) {
     return (
       <div className={styles.emptyWishlistMain}>
         <div className={styles.emptyYourWishlist}>
@@ -57,17 +31,17 @@ const Wishlist = () => {
     <div className={styles.wishlistMain}>
       <h2>Your Wishlist</h2>
       <div className={styles.wishListDetails}>
-        {datas.map((data) => (
+        {wishListData && wishListData.items.map((data) => (
           
-          <div key={data.id} className={styles.single__maindiv}>
-            <img className={styles.single__image} src={data.image} alt="name" />
+          <div key={data.product.id} className={styles.single__maindiv}>
+            <img className={styles.single__image} src={data.product.image} alt="name" />
 
-            <p className={styles.single__pricetag}>&#8377; {data.price}</p>
+            <p className={styles.single__pricetag}>&#8377; {data.product.price}</p>
 
-            <p>{data.name}</p>
+            <p>{data.product.name}</p>
             <div className={styles.single__buttondiv}>
-              <button onClick={() => addtocart(data)}>Cart</button>
-              <button onClick={() => deleteWishlist(data.id)}>Remove</button>
+              <button onClick={() => addtocart(data.product._id)}>Cart</button>
+              <button onClick={() => deleteWishlist(data.product._id)}>Remove</button>
             </div>
           </div>
         ))}

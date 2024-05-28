@@ -18,7 +18,7 @@ import { AppContext } from "../../context/AppContext";
 export default function Detail() {
   const [data, setData] = useState({});
   const { id } = useParams();
-  const { addtocart , authToken } = useContext(AppContext);
+  const { addtocart , addtowishlist } = useContext(AppContext);
 
   // console.log(id);
 
@@ -33,37 +33,23 @@ export default function Detail() {
     getData();
   }, []);
 
-  const addtowishlist = async () => {
-    // let res = await fetch(`http://localhost:8080/wishlist`, {
-    let res = await fetch(`http://localhost:3000/wishlist/add`, {
-      method: "POST",
-      body: JSON.stringify({ _id: id }),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": ` Bearer ${authToken}`
-      },
-    });
-  };
+
 
   return (
     <div>
       <div className={styles.containerDetails}>
         <div className={styles.prodImg}>
-          <img src={data.image} alt={data.name} /> 
+          <img src={data.image} alt={data.name} />
         </div>
         <div className={styles.prodDetails}>
           <h1>{data.name}</h1>
           <a href="#details">Product Details</a>
           <h3>₹ {data.price}</h3>
           <div className={styles.button}>
-            <button
-              onClick={() =>
-                addtocart(id)
-              }
-            >
+            <button onClick={() => addtocart(id)}>
               <FaShoppingCart /> Add To Cart
             </button>
-            <button onClick={addtowishlist}>
+            <button onClick={() =>addtowishlist(id)}>
               {" "}
               <FaRegHeart /> Add To WishList
             </button>

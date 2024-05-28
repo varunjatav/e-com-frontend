@@ -15,7 +15,6 @@ const SingleProduct = (props) => {
  }
 
 const addtowishlist =  async () => {
-    // let res = await fetch(`http://localhost:8080/wishlist`, {
     let res = await fetch(`https://blackpearl.onrender.com/wishlist`, {
         method: "POST",
         body: JSON.stringify({ ...props }),
