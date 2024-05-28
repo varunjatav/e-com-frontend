@@ -175,20 +175,25 @@ export default function AuthContextProvider({ children }) {
 
   // add to cart not working now (needed)
   const addtocart = async (productId) => {
-    let res = await fetch(`http://localhost:8000/cart/add`, {
-      method: "POST",
-      body: JSON.stringify({ _id: productId }),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${authToken}`,
-      },
-    });
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
+    try {
+      let res = await fetch(`http://localhost:8000/cart/add`, {
+        method: "POST",
+        body: JSON.stringify({ _id: productId }),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${authToken}`,
+        },
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+  
+      let responseData = await res.json(); // Parse the JSON response
+      setStatus(!status);
+    } catch (error) {
+console.error("error from add to cart app context: ", error.message);
     }
-
-    let responseData = await res.json(); // Parse the JSON response
-    setStatus(!status); // Trigger re-fetch of cart items
+ // Trigger re-fetch of cart items
   };
 
   // get total ammount
@@ -267,7 +272,7 @@ export default function AuthContextProvider({ children }) {
     try {
       let res = await fetch(`http://localhost:8000/wishlist/add`, {
         method: "POST",
-        body: JSON.stringify({ productId: productId }),
+        body: JSON.stringify({ _id: productId }),
         headers: {
           "Content-Type": "application/json",
           "Authorization": ` Bearer ${authToken}`,
@@ -278,11 +283,13 @@ export default function AuthContextProvider({ children }) {
       }
       const data = await res.json();
       // console.log(data);
+      setStatus(!status); // Trigger re-fetch of cart items
     } catch (error) {
       console.error("Error adding to wishlist:", error);
     }
   };
   // get wishlist data
+  useEffect(() => {
   async function getWishList() {
     try {
       let res = await fetch("http://localhost:8000/wishlist/", {
@@ -304,12 +311,16 @@ export default function AuthContextProvider({ children }) {
       }
 
       let data = await res.json();
-      // console.log("data: ", data);
-      setWishListData(data);
+      console.log("wish list data from app context: ", data);
+      setWishListData(data.items);
     } catch (error) {
       console.log("Error in fetching wishlist data: " + error);
     }
   }
+  if (authToken) {
+    getWishList();
+  }
+}, [authToken, status]);
   // delete from wishlist
   const deleteWishlist = async (id) => {
     try {
@@ -364,7 +375,7 @@ export default function AuthContextProvider({ children }) {
     setAuthToken,
     decrementCart,
     addtowishlist,
-    getWishList,
+    // getWishList,
     deleteWishlist,
     wishListData,
   };

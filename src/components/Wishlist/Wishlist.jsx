@@ -5,11 +5,7 @@ import { useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 
 const Wishlist = () => {
-  const {addtocart, status, getWishList ,wishListData, authToken , deleteWishlist} = useContext(AppContext);
-
-  useEffect(() => {  
-    getWishList();
-  }, [authToken,status]);
+  const {addtocart ,wishListData , deleteWishlist} = useContext(AppContext);
 
   console.log("wishListData : ",wishListData);
 
@@ -31,7 +27,7 @@ const Wishlist = () => {
     <div className={styles.wishlistMain}>
       <h2>Your Wishlist</h2>
       <div className={styles.wishListDetails}>
-        {wishListData && wishListData.items.map((data) => (
+        {wishListData && wishListData.map((data) => (
           
           <div key={data.product.id} className={styles.single__maindiv}>
             <img className={styles.single__image} src={data.product.image} alt="name" />

@@ -22,7 +22,7 @@ export default function Login() {
       setIterror("");
       await Login(emailRef.current.value, passRef.current.value);
       const currentUser = localStorage.getItem('token');
-      // console.log(currentUser);
+      console.log(currentUser);
       if(emailRef.current.value==="blackpearl@gmail.com"){
         navigate("/admin")
       }else if(currentUser){
