@@ -43,7 +43,7 @@ export default function AuthContextProvider({ children }) {
         // console.log(res.data.user);
         localStorage.setItem(
           "sign_up_user",
-          JSON.stringify(res.data.user.firstName + " " + res.data.user.lastName)
+          JSON.stringify(res.data.user.role)
         );
       }
     } catch (error) {
@@ -61,6 +61,26 @@ export default function AuthContextProvider({ children }) {
         });
         localStorage.setItem("token", response.data.token); // Save token to localStorage
         localStorage.setItem("refreshToken", response.data.refreshToken);// Save refresh token to localStorage
+        setAuthToken(response.data.token); // Update authToken state
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // login as admin 
+    async function AdminLogin(email, password) {
+      try {
+        // console.log(email, password);
+        const response = await axios.post("http://localhost:8000/auth/admin-login", {
+          email,
+          password,
+        });
+        const { token, refreshToken, userId, role } = response.data;
+        console.log(response.data);
+        // Save tokens in local storage or cookies
+        localStorage.setItem('token', token);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('userId', userId);
         setAuthToken(response.data.token); // Update authToken state
       } catch (error) {
         console.error(error);
@@ -421,6 +441,7 @@ export default function AuthContextProvider({ children }) {
     addtowishlist,
     deleteWishlist,
     wishListData,
+    AdminLogin
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

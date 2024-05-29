@@ -9,28 +9,33 @@ export default function Login() {
   const emailRef = useRef(null);
   const passRef = useRef(null);
   const [iterror, setIterror] = useState("")
-  const { Login } = useContext(AppContext)
+  const { Login , AdminLogin} = useContext(AppContext)
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(null);
  
   // console.log(currentUser);
   const getformdata = async (event) => {
     event.preventDefault();
-   
+   const signupUser = JSON.parse(localStorage.getItem('sign_up_user'));
     try {
      
       setIterror("");
-      await Login(emailRef.current.value, passRef.current.value);
-      const currentUser = localStorage.getItem('token');
-      console.log(currentUser);
-      if(emailRef.current.value==="blackpearl@gmail.com"){
-        navigate("/admin")
-      }else if(currentUser){
-        // console.log("current user log ");
-        navigate("/");
-      }else{
-        setIterror("invalid username or password")
+      if(signupUser === "user"){
+        await Login(emailRef.current.value, passRef.current.value);
+        const currentUser = localStorage.getItem('token');
+        if(currentUser){
+          navigate('/')
+        }
+      }else if(signupUser === "admin"){
+        await AdminLogin(emailRef.current.value, passRef.current.value);
+        const currentAdmin = localStorage.getItem('token');
+        if(currentAdmin){
+          navigate('/admin')
+        }
       }
+     
+    
+    
     } catch (error) {
       setIterror("invalid Details")
     }
@@ -40,7 +45,6 @@ export default function Login() {
     <div>
       <div style={{ width: "100%", height: "auto", backgroundColor: "#f9f9fa",paddingBottom:"2rem" }}  >
         <form action="" onSubmit={getformdata} >
-
           <div className={styles.main}>
             <div >
               <h3 style={{ marginTop: "2rem", marginLeft: "7rem" }} >
