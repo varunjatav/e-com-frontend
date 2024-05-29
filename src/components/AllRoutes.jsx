@@ -15,7 +15,8 @@ import Wishlist from './Wishlist/Wishlist';
 import Digital from "./DigitalGold/Digital"
 import Address from "./Address And Payment/Address"
 import Payment from "./Address And Payment/Payment"
-import AdminAuth from '../AdminAuth/AdminAuth';
+import AdminAuth from './Admin/AdminAuth/AdminAuth';
+import Dasboard from './Admin/Dashborad/Dasboard';
 
 
 const AllRoutes = () => {
@@ -33,7 +34,7 @@ const AllRoutes = () => {
         <Route path='/cart' element={<Cart />} />
         <Route path='/wishlist' element={<Wishlist />} />
         <Route path='/diggold' element={<Digital />} />
-        <Route path='/admin' element={<AdminAuth />} />
+        <Route path='/admin' element={<Dasboard />} />
         <Route path='/address' element={
         <PrivateRoute>
         <Address />
