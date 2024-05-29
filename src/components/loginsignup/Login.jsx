@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react'
+import React, { useRef, useState, useContext, useEffect } from 'react'
 import styles from "../loginsignup/Login.module.css"
 import {Link as RouterLink,useNavigate} from "react-router-dom"
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
@@ -9,38 +9,36 @@ export default function Login() {
   const emailRef = useRef(null);
   const passRef = useRef(null);
   const [iterror, setIterror] = useState("")
-  const { Login , AdminLogin} = useContext(AppContext)
+  const { Login  , userRole ,status} = useContext(AppContext)
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(null);
- 
-  // console.log(currentUser);
+  const [showPassword, setShowPassword] = useState(false);
+  const [currentUserRole , setCurrentUserRole] = useState(userRole);
+  let user_role = localStorage.getItem("userRole");
+
+  console.log("user role from login jsx", user_role);
+  useEffect(() => {
+    setCurrentUserRole(user_role);
+  }, [user_role, status]);
+
+ console.log("user role from login", currentUserRole);
+
+ if(currentUserRole === "user"){
+  navigate("/");
+ }else if (currentUserRole === "admin"){
+  navigate("/admin");
+ }
+ localStorage.removeItem("userRole");
   const getformdata = async (event) => {
     event.preventDefault();
-   const signupUser = JSON.parse(localStorage.getItem('sign_up_user'));
+   
     try {
-     
-      setIterror("");
-      if(signupUser === "user"){
-        await Login(emailRef.current.value, passRef.current.value);
-        const currentUser = localStorage.getItem('token');
-        if(currentUser){
-          navigate('/')
-        }
-      }else if(signupUser === "admin"){
-        await AdminLogin(emailRef.current.value, passRef.current.value);
-        const currentAdmin = localStorage.getItem('token');
-        if(currentAdmin){
-          navigate('/admin')
-        }
-      }
-     
-    
-    
+        setIterror("");
+         Login(emailRef.current.value, passRef.current.value);
+      
     } catch (error) {
       setIterror("invalid Details")
     }
   }
-
   return (
     <div>
       <div style={{ width: "100%", height: "auto", backgroundColor: "#f9f9fa",paddingBottom:"2rem" }}  >

@@ -8,8 +8,7 @@ export const AppContext = React.createContext();
 
 export default function AuthContextProvider({ children }) {
   let token = localStorage.getItem("token");
-  let signUpUser = JSON.parse(localStorage.getItem("sign_up_user"));
-
+  let user_role = localStorage.getItem("userRole");
   const [currentUser, setCurrentUser] = useState(token);
   let [data, setData] = useState([]);
   const [pselect, setPselect] = useState(1);
@@ -21,8 +20,16 @@ export default function AuthContextProvider({ children }) {
   const [status, setStatus] = useState(false);
   let [authToken, setAuthToken] = useState(currentUser);
   const [wishListData, setWishListData] = useState([]);
-
+  const [userRole , setUserRole] = useState(user_role);
+  console.log("userRole from App Context: ",userRole);
   // console.log("authToken from app context: ", authToken);
+
+  useEffect(() => {
+    const storedUserRole = localStorage.getItem("userRole");
+    if (storedUserRole) {
+      setUserRole(storedUserRole);
+    }
+  }, [status]);
   // signup function
   async function Signup(mobileNumber, email, firstName, lastName, password) {
     /*return createUserWithEmailAndPassword(auth,email,password)*/
@@ -35,57 +42,31 @@ export default function AuthContextProvider({ children }) {
         password,
       });
 
-      if (res.status >= 400 && res.status <= 499) {
-        setCurrentUser(null);
-        // console.log(res.data);
-      } else {
-        // setCurrentUser(res.data.token);
-        // console.log(res.data.user);
-        localStorage.setItem(
-          "sign_up_user",
-          JSON.stringify(res.data.user.role)
-        );
-      }
     } catch (error) {
       console.log(error);
     }
   }
-
-    // login function
-    async function Login(email, password) {
-      try {
-        // console.log(email, password);
-        const response = await axios.post("http://localhost:8000/auth/login", {
-          email,
-          password,
-        });
-        localStorage.setItem("token", response.data.token); // Save token to localStorage
-        localStorage.setItem("refreshToken", response.data.refreshToken);// Save refresh token to localStorage
-        setAuthToken(response.data.token); // Update authToken state
-      } catch (error) {
-        console.error(error);
+      // login function
+      async function Login(email, password) {
+        try {
+          // console.log(email, password);
+          const response = await axios.post("http://localhost:8000/auth/login", {
+            email,
+            password,
+          });
+          localStorage.setItem("userRole", response.data.userRole);
+          localStorage.setItem("token", response.data.token); // Save token to localStorage
+          localStorage.setItem("refreshToken", response.data.refreshToken);// Save refresh token to localStorage
+          setStatus(!status);
+          setAuthToken(response.data.token); // Update authToken state
+          setUserRole(response.data.userRole);
+        } catch (error) {
+          console.error(error);
+        }
       }
-    }
 
-    // login as admin 
-    async function AdminLogin(email, password) {
-      try {
-        // console.log(email, password);
-        const response = await axios.post("http://localhost:8000/auth/admin-login", {
-          email,
-          password,
-        });
-        const { token, refreshToken, userId, role } = response.data;
-        console.log(response.data);
-        // Save tokens in local storage or cookies
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('userId', userId);
-        setAuthToken(response.data.token); // Update authToken state
-      } catch (error) {
-        console.error(error);
-      }
-    }
+      
+
 
     // refresh token 
     async function RefreshToken() {
@@ -130,12 +111,14 @@ export default function AuthContextProvider({ children }) {
 
   async function Logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     setCurrentUser(null);
     setAuthToken(null);
     setDatas([]); // Clear cart items
     setTotal(0); // Reset total amount
     setWishListData([]);
     localStorage.removeItem("totalAmount");
+    localStorage.removeItem("userRole")
   }
 
   // fetching data
@@ -441,7 +424,9 @@ export default function AuthContextProvider({ children }) {
     addtowishlist,
     deleteWishlist,
     wishListData,
-    AdminLogin
+    userRole,
+    setUserRole,
+    status
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }
