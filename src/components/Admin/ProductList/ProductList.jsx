@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "./ProductList.module.css";
 import { MdDelete } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
