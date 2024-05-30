@@ -1,0 +1,22 @@
+.mainContainer{
+    padding-top: 10px;
+}
+
+.table{
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    padding: 10px 0;
+}
+.searchDiv{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 5px 20px;
+}
+.searchInput{
+    border: none;
+}
+.searchButton{
+    padding: 0 5px;
+}

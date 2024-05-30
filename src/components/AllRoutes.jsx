@@ -15,8 +15,10 @@ import Wishlist from './Wishlist/Wishlist';
 import Digital from "./DigitalGold/Digital"
 import Address from "./Address And Payment/Address"
 import Payment from "./Address And Payment/Payment"
-import AdminAuth from './Admin/AdminAuth/AdminAuth';
+import AddProduct from './Admin/AddProduct/AddProduct';
 import Dasboard from './Admin/Dashborad/Dasboard';
+import ProductList from './Admin/ProductList/ProductList';
+import UserList from './Admin/UserList/UserList';
 
 
 const AllRoutes = () => {
@@ -34,7 +36,13 @@ const AllRoutes = () => {
         <Route path='/cart' element={<Cart />} />
         <Route path='/wishlist' element={<Wishlist />} />
         <Route path='/diggold' element={<Digital />} />
-        <Route path='/admin' element={<Dasboard />} />
+
+        <Route path='/admin' element={<Dasboard />} >
+        <Route path='addproduct' element={<AddProduct />} />
+        <Route path='product-list' element={<ProductList />} />
+        <Route path='users-list' element={<UserList />} />
+        </Route>
+       
         <Route path='/address' element={
         <PrivateRoute>
         <Address />

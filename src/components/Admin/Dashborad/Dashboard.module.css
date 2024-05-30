@@ -1,0 +1,21 @@
+.mainContainer{
+    margin-top: 8rem;
+    display: grid;
+    grid-template-columns: 20% 80%;
+}
+.sideBar{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  background-color: #f9f9fa;
+}
+.link{
+    text-align: left;
+    font-size: small;
+    font-weight: bold;
+    margin: 0 10px;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: black;
+}

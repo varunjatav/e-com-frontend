@@ -57,7 +57,7 @@ export default function AuthContextProvider({ children }) {
           localStorage.setItem("userRole", response.data.userRole);
           localStorage.setItem("token", response.data.token); // Save token to localStorage
           localStorage.setItem("refreshToken", response.data.refreshToken);// Save refresh token to localStorage
-          setStatus(!status);
+          // setStatus(!status);
           setAuthToken(response.data.token); // Update authToken state
           setUserRole(response.data.userRole);
         } catch (error) {

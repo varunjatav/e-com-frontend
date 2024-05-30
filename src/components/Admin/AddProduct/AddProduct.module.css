@@ -1,29 +1,24 @@
 .mainContainer {
+  margin-top: 2rem;
   width: 100%;
-  margin-top: 10rem;
-  display: grid;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px 0;
 }
-.mainContainer h1 {
-  font-size: 2.5rem;
-  font-family: serif;
-}
+
 .formContainer {
-  margin: auto;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  margin-bottom: 5rem;
-  align-items: center;
+ width: 50%;
 }
 .adminForm {
   width: 100%;
+ 
 }
 .input_div {
   text-align: left;
   margin-bottom: 1rem;
+  width: 100%;
 }
 .input_div input {
   border-color: rgb(173, 169, 173);

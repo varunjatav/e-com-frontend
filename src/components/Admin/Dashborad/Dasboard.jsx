@@ -1,10 +1,24 @@
 import React from 'react'
-
+import Styles from "./Dashboard.module.css"
+import { Link, Outlet } from 'react-router-dom'
 const Dasboard = () => {
   return (
-    <div style={{height:"100vh", marginTop:"10rem"}}>
-        <h1>Dashboard</h1>
-    </div>
+    <main className={Styles.mainContainer}>
+        <aside className={Styles.sideBar}>
+          <Link className={Styles.link} to={'addproduct'}>
+            ADD PRODUCT
+          </Link>
+          <Link  to={'product-list'} className={Styles.link}>
+            PRODUCT LIST
+          </Link>
+          <Link to={'users-list'} className={Styles.link}>
+            USER LIST
+          </Link>
+        </aside>
+        <section>
+          <Outlet/>
+        </section>
+    </main>
   )
 }
 

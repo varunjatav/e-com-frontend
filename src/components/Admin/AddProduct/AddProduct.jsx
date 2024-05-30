@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import styles from "./AdminAuth.module.css";
-const AdminAuth = () => {
+import styles from "./AddProduct.module.css";
+const AddProduct = () => {
   const nameRef = useRef(null);
   const priceRef = useRef(null);
   const imageRef = useRef(null);
@@ -48,11 +48,7 @@ const AdminAuth = () => {
   };
 
   return (
-    <div>
       <div className={styles.mainContainer}>
-        <div>
-          <h1>Admin Dashboard</h1>
-        </div>
 
         <div className={styles.formContainer}>
           <form
@@ -92,8 +88,8 @@ const AdminAuth = () => {
           </form>
         </div>
       </div>
-    </div>
+  
   );
 };
 
-export default AdminAuth;
+export default AddProduct;
