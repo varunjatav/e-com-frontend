@@ -36,7 +36,7 @@ const ProductList = () => {
           <th>Remove</th>
         </tr>
         {productList.map((product, i) => {
-          console.log(product);
+          // console. (product);
           return (
             <tr key={i}>
               <td>

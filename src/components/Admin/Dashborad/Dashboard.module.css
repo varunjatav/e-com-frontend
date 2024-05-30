@@ -18,4 +18,7 @@
     padding: 5px 10px;
     text-decoration: none;
     color: black;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }

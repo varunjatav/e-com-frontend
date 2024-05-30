@@ -38,7 +38,7 @@ const AllRoutes = () => {
         <Route path='/diggold' element={<Digital />} />
 
         <Route path='/admin' element={<Dasboard />} >
-        <Route path='addproduct' element={<AddProduct />} />
+        <Route  path='' element={<AddProduct />} />
         <Route path='product-list' element={<ProductList />} />
         <Route path='users-list' element={<UserList />} />
         </Route>
