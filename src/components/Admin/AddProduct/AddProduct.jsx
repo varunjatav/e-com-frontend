@@ -17,7 +17,7 @@ const AddProduct = () => {
       if (
         nameRef.current.value === "" ||
         priceRef.current.value === "" ||
-        fileUploadRef.current.value === "" ||
+        fileUploadRef.current.files.length === 0 ||
         categoryRef.current.value === "" ||
         RatingRef.current.value === "" ||
         shippingRef.current.value === ""
@@ -27,54 +27,42 @@ const AddProduct = () => {
         return;
       }
       const uploadedFile = fileUploadRef.current.files[0];
-      // console.log(uploadedFile);
-      // const cashedURL = URL.createObjectURL(uploadedFile);
-      // setProductUrl(cashedURL);
       const formData = new FormData();
       formData.append("name", nameRef.current.value);
       formData.append("price", priceRef.current.value);
-      formData.append("file",uploadedFile);
+      formData.append("file", uploadedFile);
       formData.append("category", categoryRef.current.value);
-      formData.append("rating", RatingRef.current.value)
+      formData.append("rating", RatingRef.current.value);
       formData.append("shipping", shippingRef.current.value);
-      
+
       let res = await fetch("http://localhost:8000/jwellery/add", {
         method: "POST",
         body: formData,
       });
-      // if (res.status === 201) {
-        const data = await res.json();
-        console.log(data);
-        setProductUrl(data.image?.location);
+      const data = await res.json();
+      console.log(data.product.image.data);
+      setProductUrl(data.product.image.data);
 
-        nameRef.current.value = null;
-        priceRef.current.value = null;
-        fileUploadRef.current.value = null;
-        categoryRef.current.value = null;
-        RatingRef.current.value = null;
-        shippingRef.current.value = null;
-        alert("Product added successfully");
-      // }
+      nameRef.current.value = "";
+      priceRef.current.value = "";
+      fileUploadRef.current.value = "";
+      categoryRef.current.value = "";
+      RatingRef.current.value = "";
+      shippingRef.current.value = "";
+      alert("Product added successfully");
     } catch (error) {
       console.log("error", error);
     }
 
-    // let data1 = await res.json();
   };
   const handleImageUpload = () => {
-    // event.preventDefault();
     fileUploadRef.current.click();
   };
 
   const uploadImageDisplay = () => {
-    // e.preventDefault();
     const uploadedFile = fileUploadRef.current.files[0];
-    console.log(uploadedFile);
     const cashedURL = URL.createObjectURL(uploadedFile);
-    console.log(cashedURL);
     setProductUrl(cashedURL);
-    // const formData = new FormData();
-    
   };
   return (
     <div className={styles.mainContainer}>
@@ -88,6 +76,7 @@ const AddProduct = () => {
           />
         </center>
         <form
+          action=""
           className={styles.adminForm}
           onSubmit={(e) => {
             postData(e);
@@ -113,7 +102,12 @@ const AddProduct = () => {
 
           <div className={styles.input_div}>
             <p>Category</p>
-            <input type="text" max={5} placeholder="Category" ref={categoryRef} />
+            <input
+              type="text"
+              max={5}
+              placeholder="Category"
+              ref={categoryRef}
+            />
           </div>
           <div className={styles.input_div}>
             <p>Rating</p>
