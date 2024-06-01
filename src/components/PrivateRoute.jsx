@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../context/AppContext';
 
 const PrivateRoute = ({children}) => {
+  let token = localStorage.getItem("token");
 const {currentUser} = useContext(AppContext);
 const navigate = useNavigate()
 
 React.useEffect(()=>{
   
 
-  if(currentUser === null){
+  if(token === null){
        return navigate("/login")
     }
 },[])

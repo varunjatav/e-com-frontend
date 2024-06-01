@@ -15,7 +15,7 @@ export default function Login() {
   const [currentUserRole , setCurrentUserRole] = useState(userRole);
   let user_role = localStorage.getItem("userRole");
 
-  console.log("user role from login jsx", user_role);
+  // console.log("user role from login jsx", user_role);
   useEffect(() => {
     setCurrentUserRole(user_role);
   }, [user_role, status]);
