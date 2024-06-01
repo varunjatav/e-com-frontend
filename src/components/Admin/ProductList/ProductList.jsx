@@ -1,9 +1,14 @@
-  import React, { useEffect, useState } from "react";
+  import React, { useContext, useEffect, useState } from "react";
   import Styles from "./ProductList.module.css";
   import { MdDelete } from "react-icons/md";
   import { IoSearch } from "react-icons/io5";
+
   const ProductList = () => {
+    
+  
     const [productList, setProductList] = useState([]);
+    const [status, setStatus] = useState(false);
+    const [query, setQuery ] = useState("");
     useEffect(() => {
       const getProductList = async () => {
         try {
@@ -15,20 +20,50 @@
         }
       };
       getProductList();
-    }, []);
+    }, [status]);
+
+    const searchData = async () => {
+      let resp;
+      if (query === "") {
+        resp = await fetch(`http://localhost:8000/jwellery`);
+      } else {
+        resp = await fetch(
+          `http://localhost:8000/jwellery/q/cat?category=${query}`
+        );
+      }
+  
+      let apiData = await resp.json();
+      setProductList(apiData);
+      setQuery("");
+    };
+  
     
     const bufferToBase64 = (buffer) => {
       const binary = buffer.reduce((acc, byte) => acc + String.fromCharCode(byte), '');
       return window.btoa(binary);
     };
+
+    // remove product function
+    const removeProduct = async (productId) => {
+      try {
+        const res = await fetch(`http://localhost:8000/jwellery/delete/${productId}`, {
+          method: 'DELETE'
+        });
+        setStatus(!status);
+      } catch (error) {
+        console.log("error :", error);
+      }
+     
+
+    }
   
     // console.log("data from product list: ",productList);
     return (
       <div className={Styles.mainContainer}>
         <h1>Product List</h1>
         <div className={Styles.searchDiv}>
-          <input type="text" placeholder="Search Products" className={Styles.searchInput}/>
-          <button className={Styles.searchButton}><IoSearch /></button>
+          <input type="text" placeholder="Search Products" className={Styles.searchInput} onChange={(e)=>setQuery(e.target.value)}/>
+          <button className={Styles.searchButton} onClick={searchData}><IoSearch /></button>
         </div>
         <table className={Styles.table}>
           <tr>
@@ -54,7 +89,7 @@
                 <td>{product.star}</td>
                 <td>{product.category}</td>
                 <td>
-                  <button>
+                  <button onClick={() =>removeProduct (product._id)}>
                     <MdDelete />
                   </button>
                 </td>
