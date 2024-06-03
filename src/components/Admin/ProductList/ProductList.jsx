@@ -29,6 +29,8 @@ const ProductList = () => {
   const [productList, setProductList] = useState([]);
   const [status, setStatus] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedProduct, setSelectedProduct ] = useState(null);
+  // console.log("SelectedProduct", selectedProduct);
   useEffect(() => {
     const getProductList = async () => {
       try {
@@ -80,13 +82,28 @@ const ProductList = () => {
     }
   };
 
-  // update product
-  const updateProduct = async(productId) => {
+  // handle open modal
+  const handleOpenModal = async (productId) => {
+    setSelectedProduct(productId);
+    onOpen();
+  }
 
+  // update product
+  const updateProduct = async() => {
+    const updatedProduct = {
+      name: updateNameRef.current.value,
+      price: updatePriceRef.current.value,
+      category: updateCategoryRef.current.value,
+      quantity: updateQuantityRef.current.value,
+      description: updateDescriptionRef.current.value,
+    };
     try {
-      const res = await fetch(`http://localhost:8000/products/update/${productId}`,{
+      const res = await fetch(`http://localhost:8000/products/update/${selectedProduct}`,{
         method:"PATCH",
-        
+        headers:{
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct)
       });
       if(res.status !== 200){
         console.log("error :", res.status);
@@ -144,7 +161,7 @@ const ProductList = () => {
               <td>{product.quantity}</td>
               <td>{product.category}</td>
               <td>
-                <button onClick={onOpen}>
+                <button onClick={() =>handleOpenModal(product._id)}>
                   <GrUpdate />
                 </button>
               </td>
