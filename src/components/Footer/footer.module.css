@@ -1,28 +1,25 @@
-.footer__footers_maindiv{
-    position: relative;
-    bottom: 0px;
-}
 
-.footer__grid{
-    display: flex;
-    justify-content: space-between;
-}
+
+
 
 .footer__container{
     width: 80%;
     margin: auto;
     padding-top: 30px;
     margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    gap: 10px;
 }
 
 .footer__maindiv{
-   
     background-color: #f6eff6;
     padding-bottom: 1rem;
 }
 
 .footer__logoimage{
     width: 12rem;
+    margin: auto;
 }
 
 .footer__links{
@@ -71,7 +68,6 @@
 
 .footer__downloadimgdiv img{
     width: 35%;
-
 }
 
 .footersec__maindiv{
@@ -107,12 +103,23 @@
     color: #886afb;
    margin-bottom: 0.1rem;
  }
-
+ .contact_us{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+ }
+.contact_us > div{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
 @media screen and (max-width:990px) {
-    .footer__grid{
-        display: grid;
-        grid-template-columns: repeat(2,1fr);
+    .footer__container{
+        grid-template-columns: repeat(3,1fr);
+       
     }
+    
     .footer__thirdcontainer{
        flex-direction: column;
     }
@@ -125,10 +132,19 @@
     }
 }
 
-@media screen and (max-width:560px) {
-    .footer__grid{
-        grid-template-columns: repeat(1,1fr);
+@media screen and (max-width:800px) {
+    .footer__container{
+        grid-template-columns: repeat(2,1fr);
+       
     }
+}
+
+@media screen and (max-width:560px) {
+    .footer__container{
+        grid-template-columns: repeat(1,1fr);
+       
+    }
+   
     .footer__links{
         font-size: 1rem;
     }

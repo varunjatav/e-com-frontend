@@ -6,11 +6,10 @@ const AddProduct = () => {
   const nameRef = useRef(null);
   const priceRef = useRef(null);
   const fileUploadRef = useRef(null);
-  const categoryRef = useRef(null);
-  const shippingRef = useRef(null);
-  const RatingRef = useRef(null);
+  const DescriptionRef = useRef(null);
+  const QuantityRef = useRef(null);
   const [productUrl, setProductUrl] = useState(defaultImage);
-
+  const [category, setCategory] = useState("");
   const postData = async (e) => {
     e.preventDefault();
     try {
@@ -18,9 +17,10 @@ const AddProduct = () => {
         nameRef.current.value === "" ||
         priceRef.current.value === "" ||
         fileUploadRef.current.files.length === 0 ||
-        categoryRef.current.value === "" ||
-        RatingRef.current.value === "" ||
-        shippingRef.current.value === ""
+        QuantityRef.current.value === "" ||
+        DescriptionRef.current.value === "" ||
+        category === undefined ||
+        category === ""
       ) {
         // console.log(addressObj);
         alert("Please fill Complete Details");
@@ -31,14 +31,17 @@ const AddProduct = () => {
       formData.append("name", nameRef.current.value);
       formData.append("price", priceRef.current.value);
       formData.append("file", uploadedFile);
-      formData.append("category", categoryRef.current.value);
-      formData.append("rating", RatingRef.current.value);
-      formData.append("shipping", shippingRef.current.value);
+      formData.append("category", category);
+      formData.append("quantity", QuantityRef.current.value);
+      formData.append("description", DescriptionRef.current.value);
 
-      let res = await fetch("http://localhost:8000/jwellery/add", {
+      let res = await fetch("http://localhost:8000/products/add", {
         method: "POST",
         body: formData,
       });
+      if(res.status === 400){
+        alert("Product add failed")
+      }
       const data = await res.json();
       console.log(data.product.image.data);
       setProductUrl(data.product.image.data);
@@ -46,12 +49,13 @@ const AddProduct = () => {
       nameRef.current.value = "";
       priceRef.current.value = "";
       fileUploadRef.current.value = "";
-      categoryRef.current.value = "";
-      RatingRef.current.value = "";
-      shippingRef.current.value = "";
+      QuantityRef.current.value = "";
+      DescriptionRef.current.value = "";
+      setCategory("");
+      setProductUrl(defaultImage);
       alert("Product added successfully");
     } catch (error) {
-      console.log("error", error);
+      console.log("error", error.message);
     }
 
   };
@@ -102,20 +106,23 @@ const AddProduct = () => {
 
           <div className={styles.input_div}>
             <p>Category</p>
-            <input
-              type="text"
-              max={5}
-              placeholder="Category"
-              ref={categoryRef}
-            />
+            <select name="category" id="category" className={styles.select} onChange={(e) => setCategory(e.target.value)}>
+              <option value="" default>Select Category</option>
+              <option value="rings">Rings</option>
+              <option value="earrings">Earrings</option>
+              <option value="mangalsutra">Mangalsutra</option>
+              <option value="braceletes">Bracelets</option>
+              <option value="solitiares">Solitiaries</option>
+              <option value="kids">Kids</option>
+            </select>
           </div>
           <div className={styles.input_div}>
-            <p>Rating</p>
-            <input type="number" placeholder="Rating" ref={RatingRef} />
+            <p>Quantity</p>
+            <input type="number" placeholder="Enter Quantity" ref={QuantityRef} />
           </div>
           <div className={styles.input_div}>
-            <p>Shipping</p>
-            <input type="text" placeholder="Shipping Info" ref={shippingRef} />
+            <p>Description</p>
+            <input type="text" placeholder="Description" ref={DescriptionRef} />
           </div>
           <div>
             <input className={styles.button} type="submit" />

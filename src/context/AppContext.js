@@ -130,10 +130,10 @@ export default function AuthContextProvider({ children }) {
       category === "gifts" ||
       category === "findstore"
     ) {
-      resp = await fetch(`http://localhost:8000/jwellery`);
+      resp = await fetch(`http://localhost:8000/products`);
     } else {
       resp = await fetch(
-        `http://localhost:8000/jwellery/q/cat?category=${category}`
+        `http://localhost:8000/products/q/cat?category=${category}`
       );
     }
     let apiData = await resp.json();
@@ -165,12 +165,12 @@ export default function AuthContextProvider({ children }) {
       category === "findstore"
     ) {
       resp = await fetch(
-        `http://localhost:8000/jwellery/q/price?price_gte=${gte}&price_lte=${lte}`
+        `http://localhost:8000/products/q/price?price_gte=${gte}&price_lte=${lte}`
       );
       setCateg("all");
     } else {
       resp = await fetch(
-        `http://localhost:8000/jwellery/q?category=${category}&price_gte=${gte}&price_lte=${lte}`
+        `http://localhost:8000/products/q?category=${category}&price_gte=${gte}&price_lte=${lte}`
       );
     }
     let apiData = await resp.json();
@@ -186,10 +186,10 @@ export default function AuthContextProvider({ children }) {
     // console.log(query);
     let resp;
     if (query === "") {
-      resp = await fetch(`http://localhost:8000/jwellery`);
+      resp = await fetch(`http://localhost:8000/products`);
     } else {
       resp = await fetch(
-        `http://localhost:8000/jwellery/q/cat?category=${query}`
+        `http://localhost:8000/products/q/cat?category=${query}`
       );
       changeCateg(query);
     }
